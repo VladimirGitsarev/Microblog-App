@@ -11,7 +11,7 @@ class UserAdmin(BaseUserAdmin):
             'Extended',
             {
                 'fields': (
-                    'birth_date', 'location', 'status', 'link', 'following'
+                    'birth_date', 'location', 'status', 'link', 'following', 'image'
                 ),
             },
         ),
