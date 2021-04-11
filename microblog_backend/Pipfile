@@ -10,6 +10,9 @@ djangorestframework-simplejwt = "*"
 psycopg2-binary = "*"
 django-filter = "*"
 django-cors-headers = "*"
+django-storages = "*"
+boto3 = "*"
+pillow = "*"
 
 [dev-packages]
 

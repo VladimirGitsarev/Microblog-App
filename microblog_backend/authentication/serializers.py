@@ -7,7 +7,7 @@ from authentication.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    img = serializers.CharField(source='avatar', read_only=True)
+    avatar = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
         """Create and save new user instance"""
@@ -37,7 +37,8 @@ class UserSerializer(serializers.ModelSerializer):
             'status',
             'link',
             'is_active',
-            'img',
+            'avatar',
+            'image',
         )
 
         extra_kwargs = {
