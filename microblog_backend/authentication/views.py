@@ -58,6 +58,17 @@ class UserViewSet(ReadOnlyModelViewSet):
         users = self.get_serializer(request.user.following.all(), many=True).data
         return Response(users, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['post'])
+    def follow(self, request, pk=None):
+        requested_user = User.objects.get(id=pk)
+        if requested_user not in request.user.following.all():
+            print(request.user.following.all())
+            return Response(f'You\'re now following {requested_user.username}.', status=status.HTTP_200_OK)
+        else:
+            print(request.user.following.all())
+            return Response(f'You\'re not following {requested_user.username} anymore.', status=status.HTTP_200_OK)
+
+
 
 class RegisterView(GenericAPIView):
     queryset = User.objects.all()
