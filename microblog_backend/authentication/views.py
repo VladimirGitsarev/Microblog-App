@@ -1,3 +1,5 @@
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.conf import settings
 
 import jwt
@@ -36,6 +38,19 @@ class AuthApi(
         if request.user.id == int(kwargs['pk']):
             return super().partial_update(request)
         return Response({'detail': 'user can update only it\'s profile'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['put'])
+    def password(self, request, *args, **kwargs):
+        """Update password if user updates its password and if password is valid"""
+        if request.user.id == int(kwargs['pk']):
+            user = request.user
+            try:
+                validate_password(request.data['password'])
+                user.set_password(request.data['password'])
+                user.save()
+            except ValidationError as e:
+                return Response({'detail': e})
+        return Response({'detail': 'password successfully updated'})
 
 
 class UserViewSet(ReadOnlyModelViewSet):
