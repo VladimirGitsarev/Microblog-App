@@ -69,7 +69,6 @@ class UserViewSet(ReadOnlyModelViewSet):
             return Response(f'You\'re not following {requested_user.username} anymore.', status=status.HTTP_200_OK)
 
 
-
 class RegisterView(GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

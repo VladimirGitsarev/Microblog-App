@@ -18,17 +18,17 @@ class RegisterEmail:
         }, settings.EMAIL_SECRET_KEY, algorithm='HS256')
 
         activation_url = url + token
-        subject = 'microblog_backend profile activation'
+        subject = 'Microblog profile activation'
         html_content = f"""
                     <body>
                         <h3>Profile activation.</h3>
-                        <p>Your activation link for "microblog_backend": 
+                        <p>Your activation link for "Microblog": 
                             <a href={activation_url}>Click here</a> to activate your profile or use the link 
                             <i>{activation_url}</i>.
                         </p>
                         <p>This link is active only for an hour. If it wasn't you, just ignore this message.</p>
                         <br />
-                        <p>Best regards, <b>microblog_backend Team</b></p>
+                        <p>Best regards, <b>Microblog Team</b></p>
                     </body>
                 """
         message = EmailMultiAlternatives(subject=subject, from_email=settings.EMAIL_HOST_USER, to=[data['email']])
