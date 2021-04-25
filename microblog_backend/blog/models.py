@@ -1,3 +1,14 @@
 from django.db import models
+from authentication.models import User
+from core.models.abstract_models import CreatedAt, UpdatedAt, SoftDelete
 
-# Create your models here.
+
+class Post(CreatedAt, UpdatedAt, SoftDelete):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    body = models.CharField(max_length=300)
+    likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
+    dislikes = models.ManyToManyField(User, related_name='post_dislikes', blank=True)
+    repost_id = models.IntegerField(default=None, null=True, blank=True)
+
+    def __str__(self):
+        return f'Post {self.id} - {self.user.username}: {self.created_at}'
