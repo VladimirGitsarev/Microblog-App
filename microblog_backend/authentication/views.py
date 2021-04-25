@@ -78,10 +78,12 @@ class UserViewSet(ReadOnlyModelViewSet):
         requested_user = User.objects.get(id=pk)
         if requested_user not in request.user.following.all():
             print(request.user.following.all())
-            return Response(f'You\'re now following {requested_user.username}.', status=status.HTTP_200_OK)
+            request.user.following.add(requested_user)
+            return Response({'detail':f'You\'re now following {requested_user.username}.'}, status=status.HTTP_200_OK)
         else:
             print(request.user.following.all())
-            return Response(f'You\'re not following {requested_user.username} anymore.', status=status.HTTP_200_OK)
+            request.user.following.remove(requested_user)
+            return Response({'detail':f'You\'re not following {requested_user.username} anymore.'}, status=status.HTTP_200_OK)
 
 
 class RegisterView(GenericAPIView):
