@@ -13,6 +13,7 @@ django-cors-headers = "*"
 django-storages = "*"
 boto3 = "*"
 pillow = "*"
+django-3-jet = "*"
 
 [dev-packages]
 

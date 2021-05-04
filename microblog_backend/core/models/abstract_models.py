@@ -14,14 +14,14 @@ class SoftDelete(models.Model):
 
 
 class CreatedAt(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=True)
 
     class Meta:
         abstract = True
 
 
 class UpdatedAt(models.Model):
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True)
 
     class Meta:
         abstract = True
