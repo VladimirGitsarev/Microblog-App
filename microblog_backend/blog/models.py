@@ -12,3 +12,12 @@ class Post(CreatedAt, UpdatedAt, SoftDelete):
 
     def __str__(self):
         return f'Post {self.id} - {self.user.username}: {self.created_at}'
+
+
+class Comment(CreatedAt, UpdatedAt, SoftDelete):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    body = models.CharField(max_length=300)
+
+    def __str__(self):
+        return f'Comment {self.id} by {self.user} for {self.post}'
