@@ -10,8 +10,8 @@ from rest_framework.mixins import (
     DestroyModelMixin,
 )
 
-from blog.serializers import PostSerializer
-from blog.models import Post
+from blog.serializers import PostSerializer, CommentSerializer
+from blog.models import Post, Comment
 
 
 class PostViewSet(
@@ -22,7 +22,7 @@ class PostViewSet(
     DestroyModelMixin
 ):
 
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(soft_deleted=False)
     serializer_class = PostSerializer
     permission_classes = (IsAuthenticated, )
 
@@ -31,6 +31,13 @@ class PostViewSet(
         serializer = self.serializer_class
         posts = self.queryset.filter(user__in=user.following.all()).order_by('-created_at')
         return Response(serializer(posts, many=True).data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.user == request.user:
+            Comment.make_soft_delete(post, True)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'details': 'You can delete only your posts'})
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk):
@@ -51,3 +58,32 @@ class PostViewSet(
         post.dislikes.add(request.user)
         post.likes.remove(request.user)
         return Response({'details': f'post {post} disliked'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get', 'post'])
+    def comments(self, request, pk):
+        post = self.get_object()
+
+        if request.method == 'GET':
+            serializer = CommentSerializer(post.comment_set.all(), many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        if request.method == 'POST':
+            comment = post.comment_set.create(user=request.user, body=request.data['body'])
+            return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+
+
+class CommentViewSet(
+    GenericViewSet,
+    RetrieveModelMixin,
+    DestroyModelMixin,
+):
+    queryset = Comment.objects.filter(soft_deleted=False)
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def destroy(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.user == request.user:
+            Comment.make_soft_delete(comment, True)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'details': 'You can delete only your comments'})
