@@ -12,6 +12,9 @@ class User(AbstractUser):
     following = models.ManyToManyField('self', symmetrical=False, default=None, blank=True, related_name='followers')
     image = models.ImageField(blank=True, null=True, upload_to='profiles/')
 
+    @property
     def avatar(self):
+        if self.image:
+            return self.image.url
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, 150)

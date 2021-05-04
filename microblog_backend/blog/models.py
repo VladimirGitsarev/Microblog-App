@@ -8,7 +8,7 @@ class Post(CreatedAt, UpdatedAt, SoftDelete):
     body = models.CharField(max_length=300)
     likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
     dislikes = models.ManyToManyField(User, related_name='post_dislikes', blank=True)
-    repost_id = models.IntegerField(default=None, null=True, blank=True)
+    repost = models.ForeignKey('self', default=None, null=True, blank=True, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f'Post {self.id} - {self.user.username}: {self.created_at}'

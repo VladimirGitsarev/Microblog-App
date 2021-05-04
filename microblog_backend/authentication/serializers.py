@@ -7,7 +7,6 @@ from authentication.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    avatar = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
         """Create and save new user instance"""
@@ -38,13 +37,19 @@ class UserSerializer(serializers.ModelSerializer):
             'link',
             'is_active',
             'avatar',
-            'image',
         )
 
         extra_kwargs = {
             'password': {'write_only': True, 'required': True},
             'email': {'required': True}
         }
+
+
+class SmallUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'avatar')
 
 
 class ResetPasswordUserSerializer(serializers.ModelSerializer):
