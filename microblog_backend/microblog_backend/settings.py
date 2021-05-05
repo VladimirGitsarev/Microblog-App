@@ -19,6 +19,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+ASGI_APPLICATION = "microblog_backend.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
 INSTALLED_APPS = [
     'jet',
@@ -28,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'rest_framework',
     'django_filters',
     'corsheaders',
     'authentication',
     'blog',
-    'storages'
+    'storages',
+    'chat',
 ]
 
 MIDDLEWARE = [

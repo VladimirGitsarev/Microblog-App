@@ -31,5 +31,5 @@ services:
 #    depends_on:
 #      - web
 #      - redis
-#  redis:
-#    image: redis:6.2.1-alpine
+  redis:
+    image: redis:6.2.1-alpine
