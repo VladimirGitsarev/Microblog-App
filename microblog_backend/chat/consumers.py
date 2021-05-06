@@ -3,7 +3,9 @@ import django
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+
 from authentication.models import User
+from chat.models import Message
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -12,9 +14,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_avatar(self):
         return User.objects.get(id=self.scope['user'].id).avatar
 
+    @database_sync_to_async
+    def save_message(self, message):
+        Message.objects.create(message=message, sender=self.scope['user'], chat_id=self.chat_id)
+
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
+        self.chat_id = self.scope['url_route']['kwargs']['chat_id']
+        self.room_group_name = 'chat_%s' % self.chat_id
         self.avatar = await self.get_avatar() if str(self.scope['user']) != 'AnonymousUser' \
             else 'https://www.pinclipart.com/picdir/big/164-1640714_user-symbol-interface-contact-phone-set-add-sign.png'
 
@@ -50,12 +56,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
+        await self.save_message(message)
+
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
         user = event['user']
         avatar = event['avatar']
-        print(message, user, avatar)
         await self.send(text_data=json.dumps({
             'message': message,
             'user': user,

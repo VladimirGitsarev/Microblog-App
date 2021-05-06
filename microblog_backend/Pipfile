@@ -16,6 +16,7 @@ pillow = "*"
 django-3-jet = "*"
 channels = "*"
 django-channels-jwt-auth-middleware = "*"
+channels-redis = "*"
 
 [dev-packages]
 

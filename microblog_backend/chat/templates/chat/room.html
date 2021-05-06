@@ -73,28 +73,68 @@
         </div>
     </div>
 
-    {{ room_name|json_script:"room-name" }}
-    {{ username|json_script:"current-user"}}
+    {{ chat_id|json_script:"chat-id" }}
     <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        const username = JSON.parse(document.getElementById('current-user').textContent);
+        let user;
+        const chatId = JSON.parse(document.getElementById('chat-id').textContent);
         const token = "{{token}}"
         let token_param = token === 'None' ? '' : "?token={{token}}"
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/chat/'
-            + roomName
+            + chatId
             + '/'
             + token_param
         );
 
+        fetch('http://localhost:8000/auth/user')
+              .then((response) => {
+                return response.json();
+              })
+              .then((data) => {
+                user = data.username
+              }).then(
+                getMessages()
+              )
+
+
+        function getMessages(){
+            fetch('http://localhost:8000/chat/chats/' + chatId + '/messages')
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                data.forEach((message) => {
+                    let block = document.createElement('div')
+                    if (message.sender.username === user){
+                        block.innerHTML = `
+                            <div class="chat-box-self"><strong style="text-align: end">${message.sender.username}</strong><div style="word-wrap: break-word; max-width: 100%">${message.message}</div></div>
+                            <div style="margin-left: 5px" class="mt-auto"><img style="border-radius: 15px" width="25" src="${message.sender.avatar}"></div>
+                        `
+                        block.classList = 'chat-box-container align-self-end'
+                    }
+                    else {
+                        block.innerHTML = `
+                            <div style="margin-right: 5px" class="mt-auto"><img style="border-radius: 15px" width="25" src="${message.sender.avatar}"></div>
+                            <div class="chat-box"><strong>${message.sender.username}</strong><div style="word-wrap: break-word; max-width: 100%">${message.message}</div></div>
+                        `
+                        block.classList = 'chat-box-container'
+                    }
+
+                    let chatWindow = document.querySelector('#chat-window')
+                    chatWindow.appendChild(block)
+                    chatWindow.scrollTop = chatWindow.scrollHeight
+                })
+            })
+        }
+
+
+
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-
-            console.log(roomName, username, token)
             let block = document.createElement('div')
-            if (data.user === '{{username}}') {
+            if (data.user === user) {
                 block.innerHTML = `
                     <div class="chat-box-self"><strong style="text-align: end">${data.user}</strong><div style="word-wrap: break-word; max-width: 100%">${data.message}</div></div>
                     <div style="margin-left: 5px" class="mt-auto"><img style="border-radius: 15px" width="25" src="${data.avatar}"></div>

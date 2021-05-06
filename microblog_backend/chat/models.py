@@ -1,31 +1,18 @@
 from django.db import models
 from authentication.models import User
 
+from core.models.abstract_models import CreatedAt, UpdatedAt, SoftDelete
 
-class Chat(models.Model):
-    user1 = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='user1'
-    )
 
-    user2 = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='user2'
-    )
+class Chat(CreatedAt, UpdatedAt, SoftDelete):
 
-    date = models.DateTimeField(auto_now_add=True)
+    participants = models.ManyToManyField(User, related_name='chat_participants', blank=True)
 
     def __str__(self):
-        return 'Chat {}: {} {} - {} {}'.format(
-            self.id,
-            self.user1.fname, self.user1.lname,
-            self.user2.fname, self.user2.lname
-        )
+        return f'Chat {self.id}: {self.participants.all()}'
 
 
-class Message(models.Model):
+class Message(CreatedAt, UpdatedAt, SoftDelete):
     message = models.CharField(max_length=300)
     sender = models.ForeignKey(
         User,
@@ -37,9 +24,5 @@ class Message(models.Model):
         on_delete=models.CASCADE
     )
 
-    date = models.DateTimeField(auto_now_add=True)
-
     def __str__(self):
-        return 'Message from {} {} to chat {}'.format(
-            self.sender.fname, self.sender.lname, self.chat
-        )
+        return f'Message from {self.sender} to chat {self.chat.id}'
