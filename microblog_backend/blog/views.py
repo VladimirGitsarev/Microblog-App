@@ -1,6 +1,7 @@
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.mixins import (
@@ -40,8 +41,26 @@ class PostViewSet(
         return Response(serializer(posts, many=True).data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        request.data['user'] = request.user.id
-        return super().create(request)
+        if 'body' in request.data:
+            data = {
+                'body': request.data['body'],
+                'user': request.user.id,
+                'repost': request.data['repost'] if 'repost' in request.data else None
+            }
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            post = serializer.save()
+
+            if 'images' in dict(self.request.FILES):
+                if len(dict(self.request.FILES)['images']) > 5:
+                    raise ValidationError({'details': 'There cannot be more than 5 images for one post.'})
+
+                for image in dict(request.FILES)['images']:
+                    post.postimage_set.create(image=image, user=self.request.user)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            raise ValidationError()
 
     def destroy(self, request, *args, **kwargs):
         post = self.get_object()

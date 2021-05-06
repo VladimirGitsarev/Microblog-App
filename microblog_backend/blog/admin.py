@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from blog.models import Post, Comment
+from blog.models import Post, Comment, PostImage
 
 from jet.admin import CompactInline
 
@@ -23,3 +23,4 @@ class CommentsInstanceInline(CompactInline):
 
 admin.site.register(Post, BaseModelMixinAdmin)
 admin.site.register(Comment, BaseModelMixinAdmin)
+admin.site.register(PostImage)
