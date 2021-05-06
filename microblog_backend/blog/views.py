@@ -10,7 +10,7 @@ from rest_framework.mixins import (
     DestroyModelMixin,
 )
 
-from blog.serializers import PostSerializer, CommentSerializer
+from blog.serializers import RetrievePostSerializer, CreatePostSerializer, CommentSerializer
 from blog.models import Post, Comment
 
 
@@ -23,14 +23,25 @@ class PostViewSet(
 ):
 
     queryset = Post.objects.filter(soft_deleted=False)
-    serializer_class = PostSerializer
+    default_serializer_class = RetrievePostSerializer
     permission_classes = (IsAuthenticated, )
+
+    serializer_classes = {
+        'create': CreatePostSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     def list(self, request, *args, **kwargs):
         user = request.user
-        serializer = self.serializer_class
+        serializer = self.get_serializer
         posts = self.queryset.filter(user__in=user.following.all()).order_by('-created_at')
         return Response(serializer(posts, many=True).data, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
+        return super().create(request)
 
     def destroy(self, request, *args, **kwargs):
         post = self.get_object()
