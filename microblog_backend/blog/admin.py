@@ -21,6 +21,16 @@ class CommentsInstanceInline(CompactInline):
     show_change_link = True
 
 
-admin.site.register(Post, BaseModelMixinAdmin)
+class PostImageInline(CompactInline):
+    model = PostImage
+    extra = 1
+    show_change_link = True
+
+
+class PostAdmin(BaseModelMixinAdmin):
+    inlines = (PostImageInline, )
+
+
+admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, BaseModelMixinAdmin)
 admin.site.register(PostImage)
