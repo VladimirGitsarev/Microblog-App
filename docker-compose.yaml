@@ -33,3 +33,16 @@ services:
 #      - redis
 #  redis:
 #    image: redis:6.2.1-alpine
+  front:
+      build: ./microblog_frontend
+      volumes:
+        - ./microblog_frontend:/front
+        - /front/node_modules
+      ports:
+        - "3000:3000"
+      env_file:
+        - microblog_backend/.env
+      depends_on:
+        - db
+      command: npm start
+      stdin_open: true
