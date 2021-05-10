@@ -28,7 +28,7 @@ class Repost extends Component{
 
     getCurrentUser(){
         axiosInstance
-            .get('http://localhost:8000/api/current_user/')
+            .get('http://localhost:8000/auth/user/')
             .then(res => {
                 this.setState({
                     account: res.data
@@ -37,7 +37,7 @@ class Repost extends Component{
         }
 
     getPost(id){
-        axiosInstance.get(`http://localhost:8000/api/posts/${id}`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/${id}`)
         .then(res => {
             this.setState({
                 post: res.data,
@@ -49,8 +49,9 @@ class Repost extends Component{
     handleSubmit(e){
         e.preventDefault();
         axiosInstance
-            .post(`http://localhost:8000/api/posts/repost/${this.state.post.id}`, {
-                body: this.state.body
+            .post(`http://localhost:8000/blog/posts/`, {
+                body: this.state.body,
+                repost: this.state.post.id
             })
             .then(response => {
             this.props.history.push('/');
@@ -71,15 +72,15 @@ class Repost extends Component{
     render(){
         let header = this.state.loading_post ? '' : 
             <span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>
-                Publish repost from <NavLink to={"/user/" + this.state.post.user.user.username}> @{this.state.post.user.user.username}</NavLink>
+                Publish repost from <NavLink to={"/user/" + this.state.post.user.username}> @{this.state.post.user.username}</NavLink>
             </span>
         let repost = this.state.loading_post ? <Loader /> :
         <div style={{borderBottom: "1px solid #e6ecf0"}} className="home-container pt-3 pb-3 pr-4 pl-4">
             <div className="d-flex mb-3">
-                <img className="rounded-circle" src={this.state.account.img} height="50" width="50"></img>
+                <img className="rounded-circle" src={this.state.account.avatar} height="50" width="50"></img>
                 <div className="ml-2">
-                    <p className="m-0"><b>{this.state.account.user.first_name} {this.state.account.user.last_name}</b></p>
-                    <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.account.user.username}><p className="m-0">@{this.state.account.user.username}</p></NavLink>
+                    <p className="m-0"><b>{this.state.account.first_name} {this.state.account.last_name}</b></p>
+                    <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.account.username}><p className="m-0">@{this.state.account.username}</p></NavLink>
                 </div>
             </div>
             <h6 style={{color: 'gray'}}>Add your comment to post! <span style={{color:"#66b0ff"}}>{this.state.symbols}</span></h6>
@@ -91,10 +92,10 @@ class Repost extends Component{
                             <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
                         </p>
                         <div className="d-flex mb-1">
-                            <img className="rounded-circle" src={this.state.post.user.img} height="50" width="50"></img>
+                            <img className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
                             <div className="ml-2">
-                                <p className="m-0"><b>{this.state.post.user.user.first_name} {this.state.post.user.user.last_name}</b></p>
-                                <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.user.username}><p className="m-0">@{this.state.post.user.user.username}</p></NavLink>
+                                <p className="m-0"><b>{this.state.post.user.first_name} {this.state.post.user.last_name}</b></p>
+                                <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.username}><p className="m-0">@{this.state.post.user.username}</p></NavLink>
                             </div>
                         </div>
                         <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.body}</p>
@@ -111,7 +112,7 @@ class Repost extends Component{
             </form> 
         </div>
         
-        let recommend = this.state.loading_post ? '' : <Recommend content={'posts'} user={this.state.post.user.user.id}/>
+        let recommend = this.state.loading_post ? '' : <Recommend content={'posts'} user={this.state.post.user.id}/>
 
             
         return(

@@ -26,15 +26,15 @@ class LoginForm extends Component {
   handle_login = (e, data) => {
     e.preventDefault();
     axiosInstance
-			.post(`token-auth/`, {
+			.post(`auth/token/`, {
 				username: data.username,
-        password: data.password,
+                password: data.password,
 			})
       .then(res => {
           localStorage.setItem('access_token', res.data.access);
           localStorage.setItem('refresh_token', res.data.refresh);
           axiosInstance.defaults.headers['Authorization'] =
-          'JWT ' + localStorage.getItem('access_token');
+          'Bearer ' + localStorage.getItem('access_token');
           this.props.updateState(true)
           this.props.history.push('/')
       })

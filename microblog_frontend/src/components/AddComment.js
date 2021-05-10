@@ -35,7 +35,7 @@ class AddComment extends Component{
   handleSubmit(e){
     e.preventDefault();
     axiosInstance
-			.post(`http://localhost:8000/api/posts/comments/new/${this.props.post.id}`, {
+			.post(`http://localhost:8000/blog/posts/${this.props.post.id}/comments/`, {
         body: this.state.body
 			})
     .then(response => {

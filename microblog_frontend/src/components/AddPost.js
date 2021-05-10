@@ -24,9 +24,9 @@ class AddPost extends Component{
   handleSubmit(e){
     e.preventDefault();
     axiosInstance
-			.post(`http://localhost:8000/api/posts/new/`, {
-				user: this.props.account.user.id,
-        body: this.state.body
+			.post(`http://localhost:8000/blog/posts/`, {
+				user: this.props.account.id,
+                body: this.state.body
 			})
     .then(response => {
       this.setState({
@@ -53,7 +53,7 @@ class AddPost extends Component{
             <div className="pt-3 pb-3 home-container">
               <div className="d-flex justify-content-center flex-wrap">
                 <div className="col-auto p-0">
-                  <img className="mr-2 rounded-circle" src={this.props.account.img} width="75"></img>
+                  <img className="mr-2 rounded-circle" src={this.props.account.avatar} width="75" height="75"/>
                 </div>
                 <div className="col-10 p-0 home-content">
                 <h6 style={{color: '#5b7083'}}>Post something! <span style={{color:"#66b0ff"}}>{this.state.symbols}</span></h6>

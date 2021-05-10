@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
@@ -37,7 +38,12 @@ class PostViewSet(
     def list(self, request, *args, **kwargs):
         user = request.user
         serializer = self.get_serializer
-        posts = self.queryset.filter(user__in=user.following.all()).order_by('-created_at')
+        if 'username' in request.query_params:
+            posts = self.queryset.filter(user__username=request.query_params.get('username')).order_by('-created_at')
+        elif 'search' in request.query_params:
+            posts = self.queryset.filter(body__contains=request.query_params.get('search')).order_by('-created_at')
+        else:
+            posts = self.queryset.filter(user__in=user.following.all()).union(self.queryset.filter(user=user)).order_by('-created_at')
         return Response(serializer(posts, many=True).data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
@@ -74,20 +80,44 @@ class PostViewSet(
         post = self.get_object()
         if request.user in post.likes.all():
             post.likes.remove(request.user)
-            return Response({'details': f'post {post} unliked'}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    'likes': post.likes.all().values_list('id', flat=True),
+                    'dislikes': post.dislikes.all().values_list('id', flat=True)
+                },
+                status=status.HTTP_200_OK
+            )
         post.dislikes.remove(request.user)
         post.likes.add(request.user)
-        return Response({'details': f'post {post} liked'}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                'likes': post.likes.all().values_list('id', flat=True),
+                'dislikes': post.dislikes.all().values_list('id', flat=True)
+            },
+            status=status.HTTP_200_OK
+        )
 
     @action(detail=True, methods=['post'])
     def dislike(self, request, pk):
         post = self.get_object()
         if request.user in post.dislikes.all():
             post.dislikes.remove(request.user)
-            return Response({'details': f'post {post} undisliked'}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    'likes': post.likes.all().values_list('id', flat=True),
+                    'dislikes': post.dislikes.all().values_list('id', flat=True)
+                },
+                status=status.HTTP_200_OK
+            )
         post.dislikes.add(request.user)
         post.likes.remove(request.user)
-        return Response({'details': f'post {post} disliked'}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                'likes': post.likes.all().values_list('id', flat=True),
+                'dislikes': post.dislikes.all().values_list('id', flat=True)
+            },
+            status=status.HTTP_200_OK
+        )
 
     @action(detail=True, methods=['get', 'post'])
     def comments(self, request, pk):

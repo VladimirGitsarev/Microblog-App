@@ -36,18 +36,25 @@ class Search extends Component{
     }
 
     search(param){
-        console.log(this.state.query);
-        axiosInstance.post(`http://localhost:8000/api/search/`, {
-            query: param,
-        })
+        axiosInstance.get(`http://localhost:8000/auth/users/?search=${param}`)
         .then(response => {
             this.setState({
                 loading: false,
-                users: response.data.users,
-                posts: response.data.posts
+                users: response.data,
             })
-            console.log(response)
         })
+
+        axiosInstance.get(`http://localhost:8000/blog/posts/?search=${param}`)
+        .then(response => {
+            this.setState({
+                loading: false,
+                posts: response.data,
+            })
+        })
+    }
+    handleSearch = e => {
+         e.preventDefault();
+         this.search(this.state.query);
     }
 
     handleChange = e => {
@@ -74,7 +81,7 @@ class Search extends Component{
                                             <input onChange={this.handleChange} type="text" value={this.state.query} className="form-control" id="query" name="query" placeholder="Enter search query" />
                                         </div>
                                         <div class="col-auto my-1">
-                                            <button type="submit" className="def-btn btn-normal">Search</button>
+                                            <button type="submit" className="def-btn btn-normal" onClick={this.handleSearch}>Search</button>
                                         </div>
                                     </div>
                                 </form>

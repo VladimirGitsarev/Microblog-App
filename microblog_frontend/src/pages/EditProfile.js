@@ -18,19 +18,19 @@ class EditProfile extends Component{
     }
 
     componentDidMount(){       
-        axiosInstance.get('http://localhost:8000/api/current_user/')
+        axiosInstance.get('http://localhost:8000/auth/user/')
         .then(res => {
             this.setState({
                 account: res.data,
                 loading: false,
-                username: res.data.user.username,
-                first_name: res.data.user.first_name,
-                last_name: res.data.user.last_name,
-                email: res.data.user.email,
+                username: res.data.username,
+                first_name: res.data.first_name,
+                last_name: res.data.last_name,
+                email: res.data.email,
                 status: res.data.status,
                 location: res.data.location,
                 link: res.data.link,
-                birthdate: res.data.birthdate
+                birthdate: res.data.birth_date
             });
         })
     }
@@ -48,7 +48,7 @@ class EditProfile extends Component{
     handleSubmit = (e) => {
         e.preventDefault();
         axiosInstance
-			.post(`http://localhost:8000/api/user/edit/${this.state.account.user.id}`, {
+			.patch(`http://localhost:8000/auth/user/${this.state.account.id}/`, {
 				username: this.state.username,
                 first_name: this.state.first_name,
                 last_name: this.state.last_name,
@@ -56,19 +56,19 @@ class EditProfile extends Component{
                 status: this.state.status,
                 location: this.state.location,
                 link: this.state.link,
-                birthdate: this.state.birthdate
+                birth_date: this.state.birthdate
             })
             .then(res =>{
                 this.setState({
                     account: res.data,
-                    username: res.data.user.username,
-                    first_name: res.data.user.first_name,
-                    last_name: res.data.user.last_name,
-                    email: res.data.user.email,
+                    username: res.data.username,
+                    first_name: res.data.first_name,
+                    last_name: res.data.last_name,
+                    email: res.data.email,
                     status: res.data.status,
                     location: res.data.location,
                     link: res.data.link,
-                    birthdate: res.data.birthdate
+                    birthdate: res.data.birth_date
                 })
             })
             .catch(err =>{
@@ -87,13 +87,13 @@ class EditProfile extends Component{
         let status = this.state.account.status ? <p className="mt-1 mb-1">{this.state.account.status}</p> : '';
         let location = this.state.account.location ? <span><FontAwesomeIcon size="sm" icon={faMapMarkerAlt}/> {this.state.account.location}</span> : '';
         let link = this.state.account.link ? <span> | <FontAwesomeIcon size="sm" icon={faLink}/> {this.state.account.link}</span> : '';
-        let birthdate = this.state.account.birthdate ? <span> | <FontAwesomeIcon size="sm" icon={faBirthdayCake}/> {this.formatDate(this.state.account.birthdate)}</span> : '';
+        let birthdate = this.state.account.birth_date ? <span> | <FontAwesomeIcon size="sm" icon={faBirthdayCake}/> {this.formatDate(this.state.account.birth_date)}</span> : '';
 
         let body = this.state.loading ? <Loader /> :
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-10 col-lg-7">
-                            <h5 className="header">{this.state.account.user.first_name} {this.state.account.user.last_name} 
+                            <h5 className="header">{this.state.account.first_name} {this.state.account.last_name}
                                 <br />
                                 <span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>
                                     Profile 
@@ -102,13 +102,13 @@ class EditProfile extends Component{
                             <div className="pt-1 pb-1 home-container">
                                 <div className="d-flex align-items-center justify-content-sm-start justify-content-center flex-wrap">
                                     <div > 
-                                            <img className="p-2 align-self-center rounded-circle" src={this.state.account.img} width="150"></img>
+                                            <img className="p-2 align-self-center rounded-circle" src={this.state.account.avatar} width="150" height="150"></img>
                                     </div>
                                     <div className="user-info">
-                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.account.user.first_name} {this.state.account.user.last_name} </b></p>
-                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faAt}/> {this.state.account.user.username} </p>
-                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faEnvelope}/> {this.state.account.user.email} </p>
-                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faCalendar}/> {this.formatDate(this.state.account.user.date_joined)} </p>
+                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.account.first_name} {this.state.account.last_name} </b></p>
+                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faAt}/> {this.state.account.username} </p>
+                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faEnvelope}/> {this.state.account.email} </p>
+                                        <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faCalendar}/> {this.formatDate(this.state.account.date_joined)} </p>
                                     </div>
                                     {/* <div className="align-self-start ml-auto">
                                             <NavLink to='/profile/edit'> <p><FontAwesomeIcon size="sm" style={{color:'gray'}} icon={faEdit}/></p> </NavLink>

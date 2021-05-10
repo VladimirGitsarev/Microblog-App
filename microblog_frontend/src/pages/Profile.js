@@ -13,25 +13,23 @@ class Profile extends Component{
       super(props);
       this.state = {
        user: '',
-       account: '',
        posts: [],
        loading: true,
       };
     }
 
     componentDidMount(){       
-        axiosInstance.get('http://localhost:8000/api/current_user/')
+        axiosInstance.get('http://localhost:8000/auth/user/')
         .then(res => {
             this.setState({
-                user: res.data.user,
-                account: res.data
+                user: res.data,
             });
             this.getPosts();
         })
     }
 
     getPosts(){
-        axiosInstance.get(`http://localhost:8000/api/posts/user/${this.state.user.id}/all`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/?username=${this.state.user.username}`) // to do ${this.state.user.id}
         .then(res => {
             this.setState({
                 posts: res.data,
@@ -51,23 +49,23 @@ class Profile extends Component{
     }
 
     render(){
-        let status = this.state.account.status ? <p className="mt-1 mb-1">{this.state.account.status}</p> : '';
-        let location = this.state.account.location ? <span><FontAwesomeIcon size="sm" icon={faMapMarkerAlt}/> {this.state.account.location}</span> : '';
-        let link = this.state.account.link ? <span> | <FontAwesomeIcon size="sm" icon={faLink}/> {this.state.account.link}</span> : '';
-        let birthdate = this.state.account.birthdate ? <span> | <FontAwesomeIcon size="sm" icon={faBirthdayCake}/> {this.formatDate(this.state.account.birthdate)}</span> : '';
+        let status = this.state.user.status ? <p className="mt-1 mb-1">{this.state.user.status}</p> : '';
+        let location = this.state.user.location ? <span><FontAwesomeIcon size="sm" icon={faMapMarkerAlt}/> {this.state.user.location}</span> : '';
+        let link = this.state.user.link ? <span> | <FontAwesomeIcon size="sm" icon={faLink}/> {this.state.user.link}</span> : '';
+        let birthdate = this.state.user.birth_date ? <span> | <FontAwesomeIcon size="sm" icon={faBirthdayCake}/> {this.formatDate(this.state.user.birth_date)}</span> : '';
         
         return(
             <Fragment>
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-10 col-lg-7">
-                            <h5 className="header">{this.state.user.first_name} {this.state.user.last_name} 
+                            <h5 className="header">{this.state.user.first_name} {this.state.user.last_name}
                                 <br /><span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>{this.state.posts.length} posts </span>
                             </h5>
                             <div className="pt-1 pb-1 home-container">
                            <div className="d-flex align-items-center justify-content-sm-start justify-content-center flex-wrap">
                                <div > 
-                                    <img className="p-2 align-self-center rounded-circle" src={this.state.account.img} width="150"></img>
+                                    <img className="p-2 align-self-center rounded-circle" src={this.state.user.avatar} width="150" height="150" />
                                </div>
                                <div className="user-info">
                                    <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.user.first_name} {this.state.user.last_name} </b></p>
@@ -87,9 +85,9 @@ class Profile extends Component{
                                     {birthdate}
                                 </p>
                                 <p style={{color: "gray"}}> 
-                                    <span><b style={{color: "#212529"}}>{this.getLength(this.state.account.followers)}</b> followers</span> 
+                                    <span><b style={{color: "#212529"}}>{this.getLength(this.state.user.followers)}</b> followers</span>
                                     &nbsp;|&nbsp;
-                                    <span><b style={{color: "#212529"}}>{this.getLength(this.state.account.following)}</b> following</span>
+                                    <span><b style={{color: "#212529"}}>{this.getLength(this.state.user.following)}</b> following</span>
                                 </p>
                            </div>
                             <h6 style={{padding: "0px 15px"}}>

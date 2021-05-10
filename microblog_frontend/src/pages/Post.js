@@ -41,7 +41,7 @@ class Post extends Component {
 
     getCurrentUser(){
         axiosInstance
-            .get('http://localhost:8000/api/current_user/')
+            .get('http://localhost:8000/auth/user/')
             .then(res => {
                 this.setState({
                 account: res.data
@@ -50,32 +50,32 @@ class Post extends Component {
         }
 
     getPost(id){
-        axiosInstance.get(`http://localhost:8000/api/posts/${id}`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/${id}`)
         .then(res => {
             this.setState({
                 liked: '',
                 disliked: '',
                 post: res.data,
+                likes: res.data.likes.length,
+                dislikes: res.data.dislikes.length,
                 loading_post: false,
             });
             this.getComments(id);
             this.state.post.likes.forEach(like => {
-                if (like.id == this.state.account.user.id){
+                if (like == this.state.account.id){
                     this.setState({liked: true})
-                    console.log('Current user liked this post')
                 }
             })
             this.state.post.dislikes.forEach(dislike => {
-                if (dislike.id == this.state.account.user.id){
+                if (dislike == this.state.account.id){
                     this.setState({disliked: true})
-                    console.log('Current user disliked this post')
                 }
             })
         })
     }
 
     getComments(id){
-        axiosInstance.get(`http://localhost:8000/api/posts/comments/${id}`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/${id}/comments/`)
         .then(res => {
             this.setState({
                 comments: res.data,
@@ -95,43 +95,47 @@ class Post extends Component {
     btnClick = e => {
         e.preventDefault();
         let element = e.target.getAttribute('name');
-        console.log(element)
+
         switch(element){
             case 'like':
-                axiosInstance.post(`http://localhost:8000/api/posts/like/${this.state.post.id}`, {
+                axiosInstance.post(`http://localhost:8000/blog/posts/${this.state.post.id}/like/`, {
                     liked: this.state.liked
                 })
                 .then(response => this.setState({
                     liked: !this.state.liked,
-                    post: response.data,
-                    disliked: false
+                    likes: response.data.likes.length,
+                    dislikes: response.data.dislikes.length,
+                    disliked: false,
+                    loading_post: false,
+                    loading_comments: false
                 }))  
                 break;
             case 'dislike':
-                axiosInstance.post(`http://localhost:8000/api/posts/dislike/${this.state.post.id}`, {
+                axiosInstance.post(`http://localhost:8000/blog/posts/${this.state.post.id}/dislike/`, {
                     disliked: this.state.disliked
                 })
                 .then(response => this.setState({
                     disliked: !this.state.disliked,
-                    post: response.data,
-                    liked: false
+                    likes: response.data.likes.length,
+                    dislikes: response.data.dislikes.length,
+                    liked: false,
+                    loading_post: false,
+                    loading_comments: false
                 }))
                 break;
         }
     }
 
     deletePost(){
-        axiosInstance.delete(`http://localhost:8000/api/posts/delete/${this.state.post.id}`)
+        axiosInstance.delete(`http://localhost:8000/blog/posts/${this.state.post.id}`)
         .then(res => {
-            console.log(res);
             this.props.history.push('/');
         })
     }
 
     formatDate(str){
         let date = new Date(str);
-        console.log(date.getMinutes(), date.getMinutes().toString().length);
-        return date.getHours() + ':' + (date.getMinutes().toString().length == 1 ? '0' + date.getMinutes() : date.getMinutes()) + ' · ' + 
+        return date.getHours() + ':' + (date.getMinutes().toString().length == 1 ? '0' + date.getMinutes() : date.getMinutes()) + ' · ' +
                date.getFullYear()+ '-' + (date.getMonth()+1) + '-' + date.getDate();   
     }
 
@@ -141,7 +145,6 @@ class Post extends Component {
     
     commentClick(){
         this.setState({commenting: !this.state.commenting});
-        console.log(this.state.commenting)
     }
 
     postClick = e =>{
@@ -168,10 +171,10 @@ class Post extends Component {
                     <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
                 </p>
                     <div className="d-flex mb-1">
-                        <img className="rounded-circle" src={this.state.post.repost.user.img} height="50" width="50"></img>
+                        <img className="rounded-circle" src={this.state.post.repost.user.avatar} height="50" width="50"></img>
                         <div className="ml-2">
-                            <p className="m-0"><b>{this.state.post.repost.user.user.first_name} {this.state.post.repost.user.user.last_name}</b></p>
-                            <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.repost.user.user.username}><p className="m-0">@{this.state.post.repost.user.user.username}</p></NavLink>
+                            <p className="m-0"><b>{this.state.post.repost.user.first_name} {this.state.post.repost.user.last_name}</b></p>
+                            <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.repost.user.username}><p className="m-0">@{this.state.post.repost.user.username}</p></NavLink>
                         </div>
                     </div>
                     <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.repost.body}</p>
@@ -182,27 +185,27 @@ class Post extends Component {
             <div>
             <article className="home-container pt-3 pl-3 pr-3 pb-0">
                 <div className="d-flex">
-                    <img className="rounded-circle" src={this.state.post.user.img} height="50" width="50"></img>
+                    <img className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
                     <div className="ml-2">
-                        <p className="m-0"><b>{this.state.post.user.user.first_name} {this.state.post.user.user.last_name}</b></p>
-                        <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.user.username}><p className="m-0">@{this.state.post.user.user.username}</p></NavLink>
+                        <p className="m-0"><b>{this.state.post.user.first_name} {this.state.post.user.last_name}</b></p>
+                        <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.username}><p className="m-0">@{this.state.post.user.username}</p></NavLink>
                     </div>
-                    {this.state.post.user.user.id == this.state.account.user.id ? 
+                    {this.state.post.user.id == this.state.account.id ?
                     <FontAwesomeIcon onClick={this.toggleModal} className="ml-auto awesome-cross" icon={faTimes} size="lg"/> : ''}
                 </div>
                 <div>
                     <p style={{fontSize: "18pt"}} className="mt-2 mb-1" >{this.state.post.body}</p>
                     {repost}
-                    <p className="mb-3" style={{color:'#5b7083', fontSize: "12pt"}}> {this.formatDate(this.state.post.date)}</p>
+                    <p className="mb-3" style={{color:'#5b7083', fontSize: "12pt"}}> {this.formatDate(this.state.post.created_at)}</p>
                     <hr className="mt-3 mb-3"/>
                     <p className="mb-3" style={{color: "#5b7083"}}> 
-                        <span><b style={{color: "#212529"}}>{this.state.post.likes.length}</b> likes</span> 
+                        <span><b style={{color: "#212529"}}>{this.state.likes}</b> likes</span>
                         &nbsp;|&nbsp;
-                        <span><b style={{color: "#212529"}}>{this.state.post.dislikes.length}</b> dislikes</span>
+                        <span><b style={{color: "#212529"}}>{this.state.dislikes}</b> dislikes</span>
                         &nbsp;|&nbsp;
                         <span><b style={{color: "#212529"}}>{this.state.comments.length}</b> comments</span>
                         &nbsp;|&nbsp;
-                        <span><b style={{color: "#212529"}}>{this.state.post.reposts_count}</b> reposts</span>
+                        <span><b style={{color: "#212529"}}>{this.state.post.reposts.length}</b> reposts</span>
                     </p>
                     <hr className="mt-3 mb-3"/>
                     <div className='d-flex justify-content-around' style={{color: "#5b7083"}}>
@@ -225,7 +228,7 @@ class Post extends Component {
             {this.state.commenting && <AddComment focus={this.state.commenting} post={this.state.post} getComments={this.getComments}/>}
             </div>
         let comments = this.state.loading_comments ? <Loader /> : <CommentsList comments={this.state.comments} post={this.state.post} ></CommentsList>
-        let recommend = this.state.loading_post ? '' : <Recommend showPost={this.showPost} content={'posts'} user={this.state.post.user.user.id}/>
+        let recommend = this.state.loading_post ? '' : <Recommend showPost={this.showPost} content={'posts'} user={this.state.post.user}/>
         return(
         <Fragment>
             <div className="container">

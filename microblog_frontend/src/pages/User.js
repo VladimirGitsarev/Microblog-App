@@ -30,7 +30,7 @@ class Profile extends Component{
     getCurrentUser(){
         const name = this.props.match.params.name;
         axiosInstance
-            .get('http://localhost:8000/api/current_user/')
+            .get('http://localhost:8000/auth/user/')
             .then(res => {
                 this.setState({
                     current_account: res.data,
@@ -41,25 +41,24 @@ class Profile extends Component{
         }
 
     getUser(name){
-        axiosInstance.get(`http://localhost:8000/api/user/${name}`)
+        axiosInstance.get(`http://localhost:8000/auth/users?search=${name}`)
         .then(res => {
-            if (this.state.current_account.user.id == res.data.user.id){
+            if (this.state.current_account.id == res.data[0].id){
                 this.props.history.push('/profile')
             }
             else{
                 this.setState({
-                    user: res.data.user,
-                    account: res.data
+                    account: res.data[0]
                 });
-                this.getPosts();
+                this.getPosts(name);
                 this.checkFollowing();
             }
             
         })
     }
 
-    getPosts(){
-        axiosInstance.get(`http://localhost:8000/api/posts/user/${this.state.user.id}/all`)
+    getPosts(name){
+        axiosInstance.get(`http://localhost:8000/blog/posts/?username=${name}`)
         .then(res => {
             this.setState({
                 posts: res.data,
@@ -81,24 +80,21 @@ class Profile extends Component{
 
     checkFollowing(){
         this.state.account.followers.forEach(follower => {
-            if (this.state.current_account.user.id == follower){
-                console.log('User', this.state.current_account.user.username, 'follows', this.state.user.username);
+            if (this.state.current_account.id == follower){
                 this.setState({ followed: true })
             }   
         })
     }
 
     followClick(){
-        axiosInstance.post(`http://localhost:8000/api/user/follow/${this.state.user.id}`, {
-            user: this.state.current_account.user.id,
+        axiosInstance.post(`http://localhost:8000/auth/users/${this.state.account.id}/follow/`, {
+            user: this.state.current_account.id,
             followed: this.state.followed
           })
           .then(res =>{
-            console.log(res);
             this.setState({
                 followed: !this.state.followed,
-                user: res.data.user,
-                account: res.data
+                account: res.data.user,
             })
           })
     }
@@ -107,7 +103,7 @@ class Profile extends Component{
         let status = this.state.account.status ? <p className="mt-1 mb-1">{this.state.account.status}</p> : '';
         let location = this.state.account.location ? <span><FontAwesomeIcon size="sm" icon={faMapMarkerAlt}/> {this.state.account.location}</span> : '';
         let link = this.state.account.link ? <span> | <FontAwesomeIcon size="sm" icon={faLink}/> {this.state.account.link}</span> : '';
-        let birthdate = this.state.account.birthdate ? <span> | <FontAwesomeIcon size="sm" icon={faBirthdayCake}/> {this.formateDate(this.state.account.birthdate)}</span> : '';
+        let birthdate = this.state.account.birth_date ? <span> | <FontAwesomeIcon size="sm" icon={faBirthdayCake}/> {this.formateDate(this.state.account.birth_date)}</span> : '';
         let follow_btn = this.state.followed ? 
             <p className="def-btn btn-normal" onClick={this.followClick}><FontAwesomeIcon size="sm" icon={faMinusCircle}/> Unfollow</p> :
             <p className="def-btn btn-outline" onClick={this.followClick}><FontAwesomeIcon size="sm" icon={faPlusCircle}/> Follow</p>
@@ -115,19 +111,19 @@ class Profile extends Component{
         let body = this.state.loading_accout ? <Loader /> : 
         <div className="row justify-content-center">
                         <div className="col-md-10 col-lg-7">
-                            <h5 className="header">{this.state.user.first_name} {this.state.user.last_name} 
+                            <h5 className="header">{this.state.account.first_name} {this.state.account.last_name}
                                 <br /><span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>{this.state.posts.length} posts </span>
                             </h5>
                             <div className="pt-1 pb-1 home-container">
                            <div className="d-flex align-items-center justify-content-sm-start justify-content-center flex-wrap">
                                <div > 
-                                    <img className="p-2 rounded-circle align-self-center" src={this.state.account.img} width="150"></img>
+                                    <img className="p-2 rounded-circle align-self-center" src={this.state.account.avatar} width="150" height="150"></img>
                                </div>
                                <div className="user-info">
-                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.user.first_name} {this.state.user.last_name} </b></p>
-                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faAt}/> {this.state.user.username} </p>
-                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faEnvelope}/> {this.state.user.email} </p>
-                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faCalendar}/> {this.formateDate(this.state.user.date_joined)} </p>
+                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.account.first_name} {this.state.account.last_name} </b></p>
+                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faAt}/> {this.state.account.username} </p>
+                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faEnvelope}/> {this.state.account.email} </p>
+                                   <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faCalendar}/> {this.formateDate(this.state.account.date_joined)} </p>
                                     {follow_btn}
                                </div>
                                <div className="align-self-start ml-auto">
@@ -150,8 +146,8 @@ class Profile extends Component{
                            </div>
                             <h6 style={{padding: "0px 15px"}}>
                                 Posts by&nbsp;
-                                <b>{this.state.user.first_name} {this.state.user.last_name}</b>&nbsp;
-                                <span style={{color: "gray"}}>@{this.state.user.username}</span>
+                                <b>{this.state.account.first_name} {this.state.account.last_name}</b>&nbsp;
+                                <span style={{color: "gray"}}>@{this.state.account.username}</span>
                             </h6>
                             </div>
                             

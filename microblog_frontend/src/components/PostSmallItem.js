@@ -49,7 +49,7 @@ class PostSmallItem extends Component{
             <NavLink style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.post.repost.id}>
               <div className="repost-small-item ">
                   <p style={{fontSize: '10pt'}} className="m-0"> <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
-                    <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.repost.user.user.username}>&nbsp;@{this.post.repost.user.user.username}</NavLink>
+                    <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.repost.user.username}>&nbsp;@{this.post.repost.user.username}</NavLink>
                   </p>
                   <p className="m-0">{this.post.repost.body}</p>
               </div>
@@ -59,13 +59,13 @@ class PostSmallItem extends Component{
             <div onClick={this.showPost}>
                 <article className="post-container d-flex">
                     <div>
-                        <img className="mr-2 rounded-circle" src={this.post.user.img} width="30"></img>
+                        <img className="mr-2 rounded-circle" src={this.post.user.avatar} width="30" height="30"></img>
                     </div>
                     <div style={{fontSize: '11pt'}}>
                         <div className="d-inline-flex flex-wrap">
-                        <p className="m-0"><b>{this.post.user.user.first_name} {this.post.user.user.last_name}</b></p>
+                        <p className="m-0"><b>{this.post.user.first_name} {this.post.user.last_name}</b></p>
                         <p className="m-0" style={{color:"#5b7083"}}>&nbsp;
-                            <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.user.user.username}>@{this.post.user.user.username}</NavLink>
+                            <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.user.username}>@{this.post.user.username}</NavLink>
                         </p>
                         </div>
                         <div className="pb-1">{this.post.body.substring(0, 100)} {this.post.body.length < 100 ? '' : '...'}</div>

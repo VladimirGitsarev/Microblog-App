@@ -7,7 +7,6 @@ import Recommend from '../components/Recommend'
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axiosInstance from '../axios';
-import UserContext from '../Context';
 
 class Home extends Component{
     constructor(props) {
@@ -24,7 +23,7 @@ class Home extends Component{
     }
 
     getPosts(){
-        axiosInstance.get(`http://localhost:8000/api/posts/`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/`)
         .then(res => {
             this.setState({
                 posts: res.data,

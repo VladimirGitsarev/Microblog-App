@@ -62,7 +62,7 @@ class PostItem extends Component{
       let element = e.target.getAttribute('name');
       switch(element){
         case 'like':
-          axiosInstance.post(`http://localhost:8000/api/posts/like/${this.post.id}`, {
+          axiosInstance.post(`http://localhost:8000/blog/posts/${this.post.id}/like/`, {
             liked: this.state.liked
           })
           .then(res => {
@@ -75,7 +75,7 @@ class PostItem extends Component{
           })
           break;
         case 'dislike':
-          axiosInstance.post(`http://localhost:8000/api/posts/dislike/${this.post.id}`, {
+          axiosInstance.post(`http://localhost:8000/blog/posts/${this.post.id}/dislike/`, {
             disliked: this.state.disliked
           })
           .then(res => {
@@ -92,8 +92,8 @@ class PostItem extends Component{
 
     checkLikes(){
       let liked = false
-      this.post.likes.forEach((user) => {
-        if (user.id == this.props.account.user.id) 
+      this.post.likes.forEach((id) => {
+        if (id == this.props.account.id)
           liked = true
       })
       return liked      
@@ -101,8 +101,8 @@ class PostItem extends Component{
 
     checkDislikes(){
       let disliked = false
-      this.post.dislikes.forEach((user) => {
-        if (user.id == this.props.account.user.id) 
+      this.post.dislikes.forEach((id) => {
+        if (id == this.props.account.id)
           disliked = true
       })
       return disliked      
@@ -110,13 +110,14 @@ class PostItem extends Component{
 
     render(){
       let repost = ''
+      let images = ''
       if (this.post.repost){
         repost = 
         <NavLink style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.post.repost.id}>
           <div className="repost-item ">
               <p style={{fontSize: '11pt'}} className="m-0"> <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
-                <b>{this.post.repost.user.user.first_name}&nbsp;{this.post.repost.user.user.last_name}</b>
-                <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.repost.user.user.username}>&nbsp;@{this.post.repost.user.user.username}</NavLink>
+                <b>{this.post.repost.user.first_name}&nbsp;{this.post.repost.user.last_name}</b>
+                <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.repost.user.username}>&nbsp;@{this.post.repost.user.username}</NavLink>
               </p>
               <p className="m-0">{this.post.repost.body}</p>
           </div>
@@ -126,26 +127,27 @@ class PostItem extends Component{
       <NavLink style={{textDecoration: "none", color:"inherit"}} to={"/post/" + this.post.id}>
     <article className="post-container d-flex">
       <div>
-        <img className="mr-2 rounded-circle" src={this.post.user.img} width="50"></img>
+        <img className="mr-2 rounded-circle" src={this.post.user.avatar} width="50" height="50"/>
       </div>
       <div>
         <div className="d-inline-flex flex-wrap">
-          <p className="m-0"><b>{this.post.user.user.first_name} {this.post.user.user.last_name}</b></p>
+          <p className="m-0"><b>{this.post.user.first_name} {this.post.user.last_name}</b></p>
           <p className="m-0" style={{color:"#5b7083"}}>&nbsp;
-            <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.user.user.username}>@{this.post.user.user.username}</NavLink>
+            <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.user.username}>@{this.post.user.username}</NavLink>
           </p>
-          <p className="m-0" style={{color:"#5b7083"}}>&nbsp;&middot;&nbsp;{this.formatDate(this.post.date)}</p>
+          <p className="m-0" style={{color:"#5b7083"}}>&nbsp;&middot;&nbsp;{this.formatDate(this.post.created_at)}</p>
         </div>
         <div className="pb-1">{this.post.body}</div>
+        {images}
         {repost}
         <div className="d-inline-flex flex-wrap" style={{fontSize:"10pt"}}>
           <p className="m-0" style={{color:"#17bf63"}}> <span name="like" onClick={this.btnClick} className="like-span">Одобряю <FontAwesomeIcon name="like" icon={this.state.liked ? likeSol : likeReg}/></span>{this.state.likes || ''} </p>
           &nbsp;&nbsp;&nbsp;
           <p className="m-0" style={{color:"#e0245e"}}> <span name="dislike" onClick={this.btnClick} className="dislike-span">Осуждаю <FontAwesomeIcon name="dislike" icon={this.state.disliked ? dislikeSol : dislikeReg}/></span>{this.state.dislikes || ''}</p>
           &nbsp;&nbsp;&nbsp;
-          <p className="m-0" style={{color:"#007bff"}}> <NavLink style={{textDecoration: "none", color:"#007bff"}} to={"/post/" + this.post.id + "/comment"}> <span name="comment" className="repost-span">Comment <FontAwesomeIcon name="comment" icon={faComment}/></span></NavLink>{this.post.comments || ''}</p>
+          <p className="m-0" style={{color:"#007bff"}}> <NavLink style={{textDecoration: "none", color:"#007bff"}} to={"/post/" + this.post.id + "/comment"}> <span name="comment" className="repost-span">Comment <FontAwesomeIcon name="comment" icon={faComment}/></span></NavLink>{this.post.comments.length || ''}</p>
           &nbsp;&nbsp;&nbsp;
-          <p className="m-0" style={{color:"#007bff"}}> <span name="repost" onClick={this.btnClick} className="repost-span">Repost <FontAwesomeIcon name="repost" icon={faReply}/></span>{this.post.reposts_count || ''}</p>
+          <p className="m-0" style={{color:"#007bff"}}> <NavLink style={{textDecoration: "none", color:"#007bff"}} name="repost" to={"/repost/" + this.post.id} className="repost-span">Repost <FontAwesomeIcon name="repost" icon={faReply}/></NavLink>{this.post.reposts.length || ''}</p>
         </div>      
       </div>  
     </article>

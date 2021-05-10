@@ -15,17 +15,17 @@ class UserItem extends Component{
     linkClick = (e) => {
         // e.preventDefault();
         // this.props.getUser(this.user.user.username);
-        window.location.href = "/user/" + this.user.user.username;
+        window.location.href = "/user/" + this.user.username;
     }
 
     render(){
         return(
             <div className="">
                 <div className="recommend-user d-flex mb-1 p-1">
-                    <img className="rounded-circle" src={this.user.img} height="50" width="50"></img>
+                    <img className="rounded-circle" src={this.user.avatar} height="50" width="50"></img>
                     <div className="ml-2">
-                        <p className="m-0"><b>{this.user.user.first_name} {this.user.user.last_name}</b></p>
-                        <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+this.user.user.username}><p className="m-0">@{this.user.user.username}</p></NavLink>
+                        <p className="m-0"><b>{this.user.first_name} {this.user.last_name}</b></p>
+                        <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+this.user.username}><p className="m-0">@{this.user.username}</p></NavLink>
                         <p className="m-0" style={{fontSize:'11pt'}}>{this.user.status}</p>
                     </div>
                 </div>

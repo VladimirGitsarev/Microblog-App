@@ -32,7 +32,7 @@ class Recommend extends Component{
 
     getCurrentUser(){
         axiosInstance
-            .get('http://localhost:8000/api/current_user/')
+            .get('http://localhost:8000/auth/user/')
             .then(res => {
                 this.setState({
                     account: res.data
@@ -41,7 +41,7 @@ class Recommend extends Component{
         }
 
     getUsers(){
-        axiosInstance.get(`http://localhost:8000/api/user/recommend/get`)
+        axiosInstance.get(`http://localhost:8000/auth/users/`)
         .then(res => {
             this.setState({
                 users: res.data,
@@ -51,7 +51,7 @@ class Recommend extends Component{
     }
     
     getFollowers(){
-        axiosInstance.get(`http://localhost:8000/api/user/followers/get`)
+        axiosInstance.get(`http://localhost:8000/auth/users/followers`)
         .then(res => {
             this.setState({
                 users: res.data,
@@ -61,7 +61,7 @@ class Recommend extends Component{
     }
 
     getPosts(){
-        axiosInstance.get(`http://localhost:8000/api/posts/user/${this.props.user}/5`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/?username=${this.props.user.username}`)
         .then(res => {
             this.setState({
                 posts: res.data,
@@ -78,7 +78,7 @@ class Recommend extends Component{
                     content = 
                     <div>
                         <h5 style={{textAlign: "center"}}>May be interesting</h5>
-                        <UsersList getUser={this.props.getUser} users={this.state.users}/>
+                        <UsersList getUser={this.props.getUser} users={this.state.users.slice(0, 5)}/>
                     </div>
                 }
                 break;
@@ -87,7 +87,7 @@ class Recommend extends Component{
                     content = 
                     <div>
                         <h5 style={{textAlign: "center"}}>Your followers</h5>
-                        <UsersList getUser={this.props.getUser} users={this.state.users}/>
+                        <UsersList getUser={this.props.getUser} users={this.state.users.slice(0, 5)}/>
                     </div>
                 }
                 break;
@@ -96,7 +96,7 @@ class Recommend extends Component{
                     content = 
                         <div>
                             <h5 style={{textAlign: "center"}}> Other posts </h5>
-                            <PostsList posts={this.state.posts} small={true}/>
+                            <PostsList posts={this.state.posts.slice(0, 5)} small={true}/>
                         </div>
                 }
         }

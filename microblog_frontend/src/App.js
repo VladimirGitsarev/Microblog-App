@@ -15,7 +15,6 @@ import Login from './pages/Login'
 import Profile from './pages/Profile'
 import User from './pages/User'
 import Post from './pages/Post'
-import UserContext from './Context'
 import EditProfile from './pages/EditProfile';
 import Repost from './pages/Repost';
 import Search from './pages/Search';
@@ -41,13 +40,13 @@ class App extends Component{
 
   getCurrentUser(){
     axiosInstance.defaults.headers['Authorization'] =
-    'JWT ' + localStorage.getItem('access_token');
+    'Bearer ' + localStorage.getItem('access_token');
     if (this.state.logged_in){
       axiosInstance
-      .get('http://localhost:8000/api/current_user/')
+      .get('http://localhost:8000/auth/user/')
       .then(res => {
         this.setState({
-          user: res.data.user,
+          user: res.data,
           account: res.data
         });
       });
@@ -66,12 +65,12 @@ class App extends Component{
   }
 
   handle_logout = () => {
-    axiosInstance.post(`http://localhost:8000/api/logout/`, {
-			refresh_token: localStorage.getItem('refresh_token'),
-		});
-		localStorage.removeItem('access_token');
-		localStorage.removeItem('refresh_token');
-		axiosInstance.defaults.headers['Authorization'] = null;
+    // axiosInstance.post(`http://localhost:8000/logout/`, { // to do logout
+	// 		refresh_token: localStorage.getItem('refresh_token'),
+	// 	});
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    axiosInstance.defaults.headers['Authorization'] = null;
     this.setState({ logged_in: false, username: '', user_id: ''});
     this.history.push('/login')
   };

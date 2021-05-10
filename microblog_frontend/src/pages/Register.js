@@ -28,7 +28,7 @@ class Register extends Component{
     handleSubmit = (e) => {
         e.preventDefault();
         axiosInstance
-			.post(`http://localhost:8000/api/create/`, {
+			.post(`http://localhost:8000/auth/register/`, {
 				username: this.state.username,
                 password: this.state.password,
                 email: this.state.email,
