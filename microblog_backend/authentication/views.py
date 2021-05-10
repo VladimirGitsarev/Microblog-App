@@ -13,7 +13,13 @@ from rest_framework.response import Response
 from rest_framework import filters
 from rest_framework import status
 
-from authentication.serializers import UserSerializer, ResetPasswordUserSerializer, ResetPasswordSerializer
+from authentication.serializers import (
+    DefaultUserSerializer,
+    CreateUserSerializer,
+    UpdateUserSerializer,
+    ResetPasswordUserSerializer,
+    ResetPasswordSerializer,
+)
 from authentication.models import User
 
 from authentication.services.email.register import RegisterEmail
@@ -25,9 +31,16 @@ class AuthApi(
     UpdateModelMixin,
     ListModelMixin
 ):
-    serializer_class = UserSerializer
+    default_serializer_class = DefaultUserSerializer
     permission_classes = (IsAuthenticated, )
     queryset = User.objects.all()
+
+    serializer_classes = {
+        'partial_update': UpdateUserSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     def list(self, request, *args, **kwargs):
         """Get current authenticated user info"""
@@ -36,7 +49,8 @@ class AuthApi(
     def partial_update(self, request, *args, **kwargs):
         """Allow PATCH if user updates itself"""
         if request.user.id == int(kwargs['pk']):
-            return super().partial_update(request)
+            user = self.get_serializer().update(request.user, request.data)
+            return Response(DefaultUserSerializer(user).data, status=status.HTTP_200_OK)
         return Response({'detail': 'user can update only it\'s profile'}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['put'])
@@ -55,7 +69,7 @@ class AuthApi(
 
 class UserViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = DefaultUserSerializer
     permission_classes = (IsAuthenticated, )
 
     filter_backends = (filters.SearchFilter, )
@@ -77,18 +91,28 @@ class UserViewSet(ReadOnlyModelViewSet):
     def follow(self, request, pk=None):
         requested_user = User.objects.get(id=pk)
         if requested_user not in request.user.following.all():
-            print(request.user.following.all())
             request.user.following.add(requested_user)
-            return Response({'detail':f'You\'re now following {requested_user.username}.'}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    'detail': f'You\'re now following {requested_user.username}.',
+                    'user': self.get_serializer(requested_user).data,
+                },
+                status=status.HTTP_200_OK
+            )
         else:
-            print(request.user.following.all())
             request.user.following.remove(requested_user)
-            return Response({'detail':f'You\'re not following {requested_user.username} anymore.'}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    'detail': f'You\'re not following {requested_user.username} anymore.',
+                    'user': self.get_serializer(requested_user).data,
+                },
+                status=status.HTTP_200_OK
+            )
 
 
 class RegisterView(GenericAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = CreateUserSerializer
     permission_classes = (AllowAny, )
 
     def get(self, request, *args, **kwargs):
