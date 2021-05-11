@@ -18,6 +18,7 @@ import Post from './pages/Post'
 import EditProfile from './pages/EditProfile';
 import Repost from './pages/Repost';
 import Search from './pages/Search';
+import Chat from "./pages/Chat";
 
 class App extends Component{
   constructor(props) {
@@ -112,6 +113,7 @@ class App extends Component{
               updateState={this.updateState} 
               getCurrentUser={this.getCurrentUser}
             />}/>
+          <Route path={'/chat'} component={Chat}/>
           <Route path={'/logout'} />
         </Switch>
     </Router>

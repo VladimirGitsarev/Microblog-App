@@ -22,7 +22,6 @@ class Navbar extends Component{
   handleSubmit = e =>{
     e.preventDefault();
     this.props.history.push('/search?query=' + this.state.query);
-    console.log();
   }
 
   render(){
@@ -37,6 +36,9 @@ class Navbar extends Component{
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/profile">Profile</NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/chat">Chat</NavLink>
           </li>
         </ul>
         {label}
