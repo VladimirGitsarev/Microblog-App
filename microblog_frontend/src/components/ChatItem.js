@@ -11,13 +11,15 @@ class ChatItem extends Component {
     }
 
     render(){
+        let participant = this.account.id === this.props.chat.participants[1].id ?
+            this.props.chat.participants[0] : this.props.chat.participants[1]
         return(
             <div>
                  <div className="chat-user d-flex p-3" id={this.props.chat.id} onClick={this.props.clickChat}>
-                    <img className="rounded-circle" src={this.props.chat.participants[1].avatar} height="50" width="50"/>
+                    <img className="rounded-circle" src={participant.avatar} height="50" width="50"/>
                     <div className="ml-2">
-                        <p className="m-0"><b>{this.props.chat.participants[1].first_name} {this.props.chat.participants[1].last_name}</b></p>
-                        <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+this.props.chat.participants[1].username}><p className="m-0">@{this.props.chat.participants[1].username}</p></NavLink>
+                        <p className="m-0"><b>{participant.first_name} {participant.last_name}</b></p>
+                        <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+participant.username}><p className="m-0">@{participant.username}</p></NavLink>
                     </div>
                 </div>
                 <hr className="mt-0 mb-0"/>

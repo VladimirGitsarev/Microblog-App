@@ -113,9 +113,7 @@ class App extends Component{
               updateState={this.updateState} 
               getCurrentUser={this.getCurrentUser}
             />}/>
-          <Route path={'/chat'} render={(props) => <Chat {...props}
-              account={this.state.account}
-            />}/>
+          <Route path={'/chat'} component={Chat}/>
           <Route path={'/logout'} />
         </Switch>
     </Router>

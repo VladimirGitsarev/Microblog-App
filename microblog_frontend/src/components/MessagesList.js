@@ -13,7 +13,7 @@ class MessagesList extends Component{
         return(
             <div className="d-flex flex-column">
                 { this.props.messages ? this.props.messages.map( (message) => {
-                    return <MessageItem account={this.props.account} message={message} key={message.id}/>
+                    return <MessageItem account={this.props.account} message={message} key={message.created_at}/>
                 }) : null}
             </div>
         )

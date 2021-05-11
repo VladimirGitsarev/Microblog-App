@@ -1,3 +1,4 @@
+import datetime
 import json
 import django
 
@@ -5,6 +6,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from authentication.models import User
+from authentication.serializers import SmallUserSerializer
 from chat.models import Message
 
 
@@ -16,7 +18,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, message):
-        Message.objects.create(message=message, sender=self.scope['user'], chat_id=self.chat_id)
+        return Message.objects.create(message=message, sender=self.scope['user'], chat_id=self.chat_id)
 
     async def connect(self):
         self.chat_id = self.scope['url_route']['kwargs']['chat_id']
@@ -51,8 +53,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
-                'user': self.scope["user"].username if self.scope["user"].username else 'Guest',
-                'avatar': self.avatar
+                'sender': SmallUserSerializer(self.scope["user"]).data,
+                'created_at': datetime.datetime.now().isoformat()
             }
         )
 
@@ -61,10 +63,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
-        user = event['user']
-        avatar = event['avatar']
+        user = event['sender']
+        created_at = event['created_at']
         await self.send(text_data=json.dumps({
             'message': message,
-            'user': user,
-            'avatar': avatar
+            'sender': user,
+            'created_at': created_at
         }))

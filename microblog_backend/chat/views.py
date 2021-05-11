@@ -18,16 +18,6 @@ from chat.serializers import RetrieveChatSerializer, CreateChatSerializer, Messa
 from chat.models import Chat, Message
 
 
-def room(request, chat_id):
-    chat = Chat.objects.get(id=chat_id)
-    print(request.user)
-    return render(request, 'chat/room.html', {
-        'chat_id': chat_id,
-        'username': request.user.username,
-        'token': request.headers['Authorization'].split(' ')[-1] if 'Authorization' in request.headers else None
-    })
-
-
 class ChatViewSet(
     GenericViewSet,
     ListModelMixin,
@@ -44,7 +34,7 @@ class ChatViewSet(
         return self.serializer_classes.get(self.action, self.default_serializer_class)
 
     def get_queryset(self):
-        return Chat.objects.filter(participants__id=self.request.user.id)
+        return Chat.objects.filter(participants__id=self.request.user.id).order_by('-created_at')
 
     @action(detail=True, methods=['get'])
     def messages(self, request, pk):

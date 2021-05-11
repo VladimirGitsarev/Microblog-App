@@ -2,10 +2,23 @@ import React,  {Component, Fragment} from 'react'
 import PostsList from '../components/PostsList'
 import Loader from '../Loader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAt, faCalendar, faEnvelope, faMapMarkerAlt, faLink, faBirthdayCake, faPlusCircle, faMinusCircle, faUserAlt, faCoins } from '@fortawesome/free-solid-svg-icons'
+import {
+    faAt,
+    faCalendar,
+    faEnvelope,
+    faMapMarkerAlt,
+    faLink,
+    faBirthdayCake,
+    faPlusCircle,
+    faMinusCircle,
+    faUserAlt,
+    faCoins,
+    faComment
+} from '@fortawesome/free-solid-svg-icons'
 import { faEdit } from '@fortawesome/free-regular-svg-icons'
 import axiosInstance from '../axios'
 import Recommend from '../components/Recommend'
+import {Link, NavLink} from "react-router-dom";
 
 class Profile extends Component{
     constructor(props) {
@@ -107,6 +120,7 @@ class Profile extends Component{
         let follow_btn = this.state.followed ? 
             <p className="def-btn btn-normal" onClick={this.followClick}><FontAwesomeIcon size="sm" icon={faMinusCircle}/> Unfollow</p> :
             <p className="def-btn btn-outline" onClick={this.followClick}><FontAwesomeIcon size="sm" icon={faPlusCircle}/> Follow</p>
+        let chat_btn = <Link to={{pathname:"/chat/", state:{chatWith: this.state.account}}} ><p className="def-btn btn-outline"> <FontAwesomeIcon size="sm" icon={faComment}/> Chat </p></Link>
 
         let body = this.state.loading_accout ? <Loader /> : 
         <div className="row justify-content-center">
@@ -125,6 +139,7 @@ class Profile extends Component{
                                    <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faEnvelope}/> {this.state.account.email} </p>
                                    <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faCalendar}/> {this.formateDate(this.state.account.date_joined)} </p>
                                     {follow_btn}
+                                    {chat_btn}
                                </div>
                                <div className="align-self-start ml-auto">
                                     
