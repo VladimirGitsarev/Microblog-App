@@ -1,4 +1,4 @@
-- Update chat for React (FE + BE)
+- Update chat for React (FE + BE) +-
 - Update profile formatting (image) (FE)
 - Add post images display (FE)
 - Add comments images (BE + FE)
