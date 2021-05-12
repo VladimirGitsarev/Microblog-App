@@ -61,7 +61,7 @@ class Recommend extends Component{
     }
 
     getPosts(){
-        axiosInstance.get(`http://localhost:8000/blog/posts/?username=${this.props.user.username}`)
+        axiosInstance.get(`http://localhost:8000/blog/posts/?user_id=${this.props.user}`)
         .then(res => {
             this.setState({
                 posts: res.data,
