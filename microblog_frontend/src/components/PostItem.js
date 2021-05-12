@@ -125,9 +125,9 @@ class PostItem extends Component{
       let imageSize;
       switch (this.post.images.length){
         case 1: imageSize = window.innerWidth * 0.25; break;
-        case 2: imageSize = window.innerWidth * 0.15; break;
-        case 3: imageSize = window.innerWidth * 0.15; break;
-        case 4: imageSize = window.innerWidth * 0.15; break;
+        case 2: imageSize = window.innerWidth * 0.14; break;
+        case 3: imageSize = window.innerWidth * 0.14; break;
+        case 4: imageSize = window.innerWidth * 0.14; break;
         default: imageSize = window.innerWidth * 0.125; break;
       }
       let repost = ''

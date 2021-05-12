@@ -75,9 +75,9 @@ class Repost extends Component{
         if (!this.state.loading_post){
             switch (this.state.post.images.length){
                 case 1: imageSize = window.innerWidth * 0.25; break;
-                case 2: imageSize = window.innerWidth * 0.15; break;
-                case 3: imageSize = window.innerWidth * 0.15; break;
-                case 4: imageSize = window.innerWidth * 0.15; break;
+                case 2: imageSize = window.innerWidth * 0.14; break;
+                case 3: imageSize = window.innerWidth * 0.14; break;
+                case 4: imageSize = window.innerWidth * 0.14; break;
                 default: imageSize = window.innerWidth * 0.125; break;
               }
             images = this.state.post.images ? <div className="d-flex justify-content-center align-content-center align-self-center flex-wrap mt-1 mb-1">{this.state.post.images.map( (image) => {
