@@ -42,6 +42,8 @@ class PostViewSet(
             posts = self.queryset.filter(user__username=request.query_params.get('username')).order_by('-created_at')
         elif 'search' in request.query_params:
             posts = self.queryset.filter(body__contains=request.query_params.get('search')).order_by('-created_at')
+        elif 'user_id' in request.query_params:
+            posts = self.queryset.filter(user_id=request.query_params.get('user_id')).order_by('-created_at')
         else:
             posts = self.queryset.filter(user__in=user.following.all()).union(self.queryset.filter(user=user)).order_by('-created_at')
         return Response(serializer(posts, many=True).data, status=status.HTTP_200_OK)
