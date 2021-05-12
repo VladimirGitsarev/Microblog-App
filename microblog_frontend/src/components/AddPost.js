@@ -28,9 +28,10 @@ class AddPost extends Component{
     let formData = new FormData();
     formData.append("user", this.props.account.id);
     formData.append("body", this.state.body);
-    this.state.images.forEach(image => {
-      formData.append("images", image)
-    })
+    if (this.state.images)
+      this.state.images.forEach(image => {
+        formData.append("images", image)
+      })
     axiosInstance
         .post(`http://localhost:8000/blog/posts/`, formData, {headers:{'Content-Type': 'multipart/form-data'}})
         .then(response => {
