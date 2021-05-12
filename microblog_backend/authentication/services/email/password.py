@@ -12,7 +12,7 @@ class PasswordEmail:
     def send_email(user, url):
         expiration_time_seconds = 3600
         token = jwt.encode({'user_id': user.id, 'exp': time() + expiration_time_seconds}, settings.EMAIL_SECRET_KEY, algorithm='HS256')
-        reset_url = url + token
+        reset_url = "http://0.0.0.0:3000/reset/" + token
         subject = 'Microblog password reset'
         html_content = f"""
             <body>

@@ -19,6 +19,7 @@ import EditProfile from './pages/EditProfile';
 import Repost from './pages/Repost';
 import Search from './pages/Search';
 import Chat from "./pages/Chat";
+import Reset from "./pages/Reset";
 
 class App extends Component{
   constructor(props) {
@@ -61,7 +62,10 @@ class App extends Component{
     if (this.state.logged_in)
       this.getCurrentUser();
     else{
-      this.history.push('/login');
+      if (!window.location.pathname.startsWith("/reset"))
+      {
+        this.history.push('/login');
+      }
     }
   }
 
@@ -116,6 +120,7 @@ class App extends Component{
               getCurrentUser={this.getCurrentUser}
             />}/>
           <Route path={'/chat'} component={Chat}/>
+          <Route path={'/reset/:token?'} component={Reset}/>
           <Route path={'/logout'} />
         </Switch>
     </Router>

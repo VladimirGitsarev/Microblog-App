@@ -21,7 +21,7 @@ code {
   margin-top: 1rem;
   border: 5px solid #f3f3f3; 
   position:absolute; 
-  left:46%; 
+  left:46%;
   border-radius: 50%; 
   border-top: 5px solid #007bff; 
   width: 40px; 
@@ -32,7 +32,25 @@ code {
 { 
 0% { transform: rotate(0deg); } 
 100% { transform: rotate(360deg); } 
-} 
+}
+
+.reset-loader
+{
+  margin-top: 1rem;
+  border: 5px solid #f3f3f3;
+  position:absolute;
+  left:50%;
+  border-radius: 50%;
+  border-top: 5px solid #007bff;
+  width: 40px;
+  height: 40px;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin
+{
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
 
 .home-container{
   border-left: 1px solid #e6ecf0;
