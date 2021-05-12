@@ -112,16 +112,29 @@ class PostItem extends Component{
     }
 
     toPost(event){
-      console.log(event.target.tagName)
-      console.log(event.target.id)
       if (event.target.id === 'post-trigger' || event.target.tagName === 'ARTICLE')
         this.props.history.push("/post/" + this.post.id)
     }
+    //
+    // toRepost(event){
+    //   if (event.target.id === 'post-trigger' || event.target.tagName === 'ARTICLE')
+    //     this.props.history.push("/post/" + this.post.repost.id)
+    // }
 
     render(){
-      let imageSize = this.post.images.length === 1 ? window.innerWidth * 0.25 : window.innerWidth * 0.125
+      let imageSize;
+      switch (this.post.images.length){
+        case 1: imageSize = window.innerWidth * 0.25; break;
+        case 2: imageSize = window.innerWidth * 0.15; break;
+        case 3: imageSize = window.innerWidth * 0.15; break;
+        case 4: imageSize = window.innerWidth * 0.15; break;
+        default: imageSize = window.innerWidth * 0.125; break;
+      }
       let repost = ''
       if (this.post.repost){
+        let repostImages = this.post.repost.images ? <div className="d-flex align-content-center flex-wrap mt-1 mb-1">{this.post.repost.images.map( (image) => {
+                    return <img src={image} style={{width: "100px", height: "100px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
+                })}</div> : null
         repost = 
         <NavLink style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.post.repost.id}>
           <div className="repost-item ">
@@ -130,6 +143,7 @@ class PostItem extends Component{
                 <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.repost.user.username}>&nbsp;@{this.post.repost.user.username}</NavLink>
               </p>
               <p className="m-0">{this.post.repost.body}</p>
+            {repostImages}
           </div>
         </NavLink>
       }

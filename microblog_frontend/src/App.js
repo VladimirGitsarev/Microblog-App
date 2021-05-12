@@ -92,7 +92,8 @@ class App extends Component{
           account = {this.state.account}
           />}/>
           <Route path={'/user/:name/'} 
-            render={(props) => <User {...props} 
+            render={(props) => <User {...props}
+                history={this.history}
               account={this.state.account}
             />}/>
           <Route path={'/post/:id/:comment?'} 

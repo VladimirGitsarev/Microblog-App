@@ -55,9 +55,7 @@ class AddComment extends Component{
                 <textarea autoFocus="true" className="text-area w-100" rows="3" value={this.state.body} maxLength="300" onChange={this.handleChange}  placeholder="What do you think?" name="body"></textarea>
                 <div className="d-flex align-items-baseline justify-content-between mt-1">
                   <div className="m-0 p-0">
-                    <FontAwesomeIcon className="awesome-icon" icon={faImage} color="#5b7083" size="lg" /> 
-                    {/* <FontAwesomeIcon className="awesome-icon" icon={faChartBar} color="#007bff" size="lg"/>   
-                    <FontAwesomeIcon className="awesome-icon" icon={faSmile} color="#007bff" size="lg"/>                                        */}
+                    {/*<FontAwesomeIcon className="awesome-icon" icon={faImage} color="#5b7083" size="lg" />*/}
                   </div>
                   <div>
                     <button type='submit' className="def-btn btn-normal">Comment</button>

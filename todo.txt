@@ -1,7 +1,6 @@
-- Update chat for React (FE + BE) +-
-- Update profile formatting (image) (FE)
-- Add post images display (FE)
-- Add comments images (BE + FE)
++ Update chat for React (FE + BE)
++ Update profile formatting (image) (FE)
++ Add post images display (FE)
 - Add images compression (BE)
 - Add React components for resetting password (FE)
 - Add votes with different answers (BE + FE)

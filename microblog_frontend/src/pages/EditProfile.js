@@ -240,7 +240,7 @@ class EditProfile extends Component{
                                         </div>
                                     </div>
                                     <div className="d-flex justify-content-center">
-                                        <img width="100" src={this.state.fileUrl}/>
+                                        <img style={{objectFit: "cover", borderRadius:"1.5rem"}} width="300" height="300" src={this.state.fileUrl}/>
                                     </div>
                                     <div className="form-group row justify-content-end">
                                         <div className="col-sm-0 pr-3">

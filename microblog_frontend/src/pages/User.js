@@ -29,7 +29,6 @@ class Profile extends Component{
        posts: [],
        followed: false,
        loading: true,
-       loading_accout: true
       };
       this.followClick = this.followClick.bind(this);
       this.getUser = this.getUser.bind(this)
@@ -166,7 +165,7 @@ class Profile extends Component{
                             </h6>
                             </div>
                             
-                            <PostsList account={this.props.account} posts={this.state.posts}></PostsList>
+                            <PostsList history={this.props.history} account={this.props.account} posts={this.state.posts}></PostsList>
                             {this.state.loading && <Loader />}
                         </div>
                         <div className="ml-0 mb-4 d-none d-xl-block d-lg-block d-md-none col-lg-4">

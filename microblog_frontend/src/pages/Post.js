@@ -168,6 +168,9 @@ class Post extends Component {
 
         let repost = ''
         if (this.state.post.repost){
+            let repostImages = this.state.post.repost.images ? <div className="d-flex align-content-center flex-wrap mt-1 mb-1">{this.state.post.repost.images.map( (image) => {
+                    return <img src={image} style={{width: "95px", height: "95px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
+                })}</div> : null
             repost = 
             <NavLink onClick={this.postClick} style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.state.post.repost.id}> 
                 <div className="repost pt-2 pb-2">
@@ -182,6 +185,7 @@ class Post extends Component {
                         </div>
                     </div>
                     <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.repost.body}</p>
+                    {repostImages}
                 </div>
             </NavLink>
         }

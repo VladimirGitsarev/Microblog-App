@@ -43,6 +43,9 @@ class PostSmallItem extends Component{
       }
 
     render(){
+        let images = this.post.images ? <div className="d-flex justify-content-center align-content-center flex-wrap mt-1 mb-1">{this.post.images.map( (image) => {
+                    return <img src={image} style={{width: "75px", height: "75px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
+                })}</div> : null
         let repost = ''
         if (this.post.repost){
             repost = 
@@ -69,6 +72,7 @@ class PostSmallItem extends Component{
                         </p>
                         </div>
                         <div className="pb-1">{this.post.body.substring(0, 100)} {this.post.body.length < 100 ? '' : '...'}</div>
+                        {images}
                         {repost}
                     </div>
                 </article>

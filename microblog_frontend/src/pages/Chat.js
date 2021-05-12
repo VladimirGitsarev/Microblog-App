@@ -46,8 +46,6 @@ class Chat extends Component{
         let existChatId = null
         if (this.props.location.state != null) {
                 this.state.chats.forEach(chat => {
-                    console.log(this.props.location.state.chatWith.id)
-                    console.log(chat.participants)
                     if ([chat.participants[0].id, chat.participants[1].id].includes(this.props.location.state.chatWith.id))
                         existChatId = chat.id
                 })

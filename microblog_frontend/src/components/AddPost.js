@@ -7,7 +7,7 @@ import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { createBrowserHistory } from 'history';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImage, faChartBar, faSmile} from '@fortawesome/free-solid-svg-icons'
+import {faImage, faChartBar, faSmile, faCross, faTimes, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import axiosInstance from 'axios';
 
 
@@ -19,20 +19,26 @@ class AddPost extends Component{
       symbols:300
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleImage = this.handleImage.bind(this);
+    this.deleteImage = this.deleteImage.bind(this);
   }
 
   handleSubmit(e){
     e.preventDefault();
+    let formData = new FormData();
+    formData.append("user", this.props.account.id);
+    formData.append("body", this.state.body);
+    this.state.images.forEach(image => {
+      formData.append("images", image)
+    })
     axiosInstance
-			.post(`http://localhost:8000/blog/posts/`, {
-				user: this.props.account.id,
-                body: this.state.body
-			})
-    .then(response => {
-      this.setState({
-        body: '',
-        symbols: 300
-      })
+        .post(`http://localhost:8000/blog/posts/`, formData, {headers:{'Content-Type': 'multipart/form-data'}})
+        .then(response => {
+          this.setState({
+            body: '',
+            symbols: 300,
+            images: []
+          })
       this.props.getPosts();
     })
   }
@@ -48,7 +54,25 @@ class AddPost extends Component{
     });
   };
 
+  handleImage(event){
+    let imagesArray = Array.from(event.target.files)
+    this.setState({images: imagesArray})
+  }
+
+  deleteImage(event){
+    let imageId = event.target.id === '' ? event.target.parentElement.id : event.target.id
+    let images = this.state.images
+    images.splice(imageId, 1)
+    this.setState({images: images})
+  }
+
   render(){
+    let images = this.state.images ? <div className="d-flex flex-row align-content-center mt-1 mb-1">{this.state.images.map( (image, index) => {
+      return <div className="thumbnail">
+              <FontAwesomeIcon id={index} className="delete-icon" icon={faTimesCircle} onClick={this.deleteImage}/>
+              <img src={URL.createObjectURL(image)} style={{borderRadius: "1.5rem"}}/>
+        </div>
+    })}</div> : null
     return (
             <div className="pt-3 pb-3 home-container">
               <div className="d-flex justify-content-center flex-wrap">
@@ -58,10 +82,11 @@ class AddPost extends Component{
                 <div className="col-10 p-0 home-content">
                 <h6 style={{color: '#5b7083'}}>Post something! <span style={{color:"#66b0ff"}}>{this.state.symbols}</span></h6>
                   <form onSubmit={this.handleSubmit}>
-                      <textarea className="text-area w-100" rows="5" value={this.state.body} maxLength="300" onChange={this.handleChange} placeholder="What's up?" name="body"></textarea>
+                      <textarea className="text-area w-100" rows="5" value={this.state.body} maxLength="300" onChange={this.handleChange} placeholder="What's up?" name="body"/>
+                      {images}
                       <div className="d-flex align-items-baseline justify-content-between mt-1">
                         <div className="m-0 p-0">
-                          <FontAwesomeIcon className="awesome-icon" icon={faImage} color="#5b7083" size="lg" /> 
+                          <label><input type="file" hidden multiple onChange={this.handleImage}/><FontAwesomeIcon className="awesome-icon" icon={faImage} color="#5b7083" size="lg"/></label>
                           <FontAwesomeIcon className="awesome-icon" icon={faChartBar} color="#5b7083" size="lg"/>   
                           <FontAwesomeIcon className="awesome-icon" icon={faSmile} color="#5b7083" size="lg"/>                                       
                         </div>
