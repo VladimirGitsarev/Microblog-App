@@ -25,7 +25,7 @@ class PostsList extends Component{
             content = 
             <div className="posts-container">
                 { this.props.posts.map( (post) => {
-                    return <PostItem account={this.props.account} post={post} key={post.id}/>
+                    return <PostItem history={this.props.history} account={this.props.account} post={post} key={post.id}/>
                 })}
             </div>
         }

@@ -28,13 +28,13 @@ class MessageItem extends Component {
 
                 </div>
                 <div style={{marginLeft: "5px"}} className="mt-auto">
-                    <img style={{borderRadius: "15px"}} width="25" height="25" src={this.message.sender.avatar}/>
+                    <img style={{objectFit: "cover"}} style={{borderRadius: "15px"}} width="25" height="25" src={this.message.sender.avatar}/>
                 </div>
             </div>
         }
         else messageBox = <div className="chat-box-container">
             <div style={{marginRight: "5px"}} className="mt-auto">
-                <img style={{borderRadius: "15px"}} width="25" height="25" src={this.message.sender.avatar}/>
+                <img style={{borderRadius: "15px", objectFit: "cover"}} width="25" height="25" src={this.message.sender.avatar}/>
             </div>
             <div className="chat-box"><strong>{this.message.sender.username}</strong>
                 <div style={{wordWrap: "break-word", maxWidth: "100%"}}>{this.message.message}</div>

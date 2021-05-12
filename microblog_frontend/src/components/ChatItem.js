@@ -16,7 +16,7 @@ class ChatItem extends Component {
         return(
             <div>
                  <div className="chat-user d-flex p-3" id={this.props.chat.id} onClick={this.props.clickChat}>
-                    <img className="rounded-circle" src={participant.avatar} height="50" width="50"/>
+                    <img style={{objectFit: "cover"}} className="rounded-circle" src={participant.avatar} height="50" width="50"/>
                     <div className="ml-2">
                         <p className="m-0"><b>{participant.first_name} {participant.last_name}</b></p>
                         <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+participant.username}><p className="m-0">@{participant.username}</p></NavLink>

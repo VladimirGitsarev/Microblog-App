@@ -70,14 +70,28 @@ class Repost extends Component{
       };
 
     render(){
-        let header = this.state.loading_post ? '' : 
+        let images = null;
+        let imageSize;
+        if (!this.state.loading_post){
+            switch (this.state.post.images.length){
+                case 1: imageSize = window.innerWidth * 0.25; break;
+                case 2: imageSize = window.innerWidth * 0.15; break;
+                case 3: imageSize = window.innerWidth * 0.15; break;
+                case 4: imageSize = window.innerWidth * 0.15; break;
+                default: imageSize = window.innerWidth * 0.125; break;
+              }
+            images = this.state.post.images ? <div className="d-flex justify-content-center align-content-center align-self-center flex-wrap mt-1 mb-1">{this.state.post.images.map( (image) => {
+                    return <img src={image} style={{width: imageSize + "px", height: imageSize + "px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
+                })}</div> : null
+        }
+        let header = this.state.loading_post ? '' :
             <span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>
                 Publish repost from <NavLink to={"/user/" + this.state.post.user.username}> @{this.state.post.user.username}</NavLink>
             </span>
         let repost = this.state.loading_post ? <Loader /> :
         <div style={{borderBottom: "1px solid #e6ecf0"}} className="home-container pt-3 pb-3 pr-4 pl-4">
             <div className="d-flex mb-3">
-                <img className="rounded-circle" src={this.state.account.avatar} height="50" width="50"></img>
+                <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.account.avatar} height="50" width="50"></img>
                 <div className="ml-2">
                     <p className="m-0"><b>{this.state.account.first_name} {this.state.account.last_name}</b></p>
                     <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.account.username}><p className="m-0">@{this.state.account.username}</p></NavLink>
@@ -92,29 +106,26 @@ class Repost extends Component{
                             <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
                         </p>
                         <div className="d-flex mb-1">
-                            <img className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
+                            <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
                             <div className="ml-2">
                                 <p className="m-0"><b>{this.state.post.user.first_name} {this.state.post.user.last_name}</b></p>
                                 <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.username}><p className="m-0">@{this.state.post.user.username}</p></NavLink>
                             </div>
                         </div>
                         <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.body}</p>
+                        {images}
                     </div>
                 </NavLink>
                 <div className="d-flex align-items-baseline justify-content-end mt-1">
-                    {/* <div className="m-0 p-0">
-                        <FontAwesomeIcon className="awesome-icon" icon={faImage} color="#007bff" size="lg" />                                   
-                    </div> */}
                     <div>
                         <button type='submit' className="def-btn btn-normal">Repost</button>
                     </div>
                 </div>
             </form> 
         </div>
-        
+
         let recommend = this.state.loading_post ? '' : <Recommend content={'posts'} user={this.state.post.user.id}/>
 
-            
         return(
             <Fragment>
             <div className="container">

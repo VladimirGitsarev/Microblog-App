@@ -92,7 +92,8 @@ class App extends Component{
           account = {this.state.account}
           />}/>
           <Route path={'/user/:name/'} 
-            render={(props) => <User {...props} 
+            render={(props) => <User {...props}
+                history={this.history}
               account={this.state.account}
             />}/>
           <Route path={'/post/:id/:comment?'} 
@@ -103,7 +104,8 @@ class App extends Component{
           <Route path={'/register'} component={Register}/>
           <Route path={'/profile/edit'} component={EditProfile}/>
           <Route path={'/profile'} 
-            render={(props) => <Profile {...props} 
+            render={(props) => <Profile {...props}
+              history={this.history}
               account={this.state.account}
             />}/>
           <Route path={'/search'} component={Search} />

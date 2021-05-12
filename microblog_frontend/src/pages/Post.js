@@ -162,8 +162,15 @@ class Post extends Component {
     }
 
     render(){
+        let images = this.state.post.images ? <div className="d-flex align-content-center align-self-center flex-wrap mt-2 mb-2">{this.state.post.images.map( (image) => {
+                    return <img className="img-fluid" src={image} style={{maxWidth:"100%", height: "auto", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
+                })}</div> : null
+
         let repost = ''
         if (this.state.post.repost){
+            let repostImages = this.state.post.repost.images ? <div className="d-flex align-content-center flex-wrap mt-1 mb-1">{this.state.post.repost.images.map( (image) => {
+                    return <img src={image} style={{width: "95px", height: "95px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
+                })}</div> : null
             repost = 
             <NavLink onClick={this.postClick} style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.state.post.repost.id}> 
                 <div className="repost pt-2 pb-2">
@@ -171,13 +178,14 @@ class Post extends Component {
                     <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
                 </p>
                     <div className="d-flex mb-1">
-                        <img className="rounded-circle" src={this.state.post.repost.user.avatar} height="50" width="50"></img>
+                        <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.repost.user.avatar} height="50" width="50"></img>
                         <div className="ml-2">
                             <p className="m-0"><b>{this.state.post.repost.user.first_name} {this.state.post.repost.user.last_name}</b></p>
                             <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.repost.user.username}><p className="m-0">@{this.state.post.repost.user.username}</p></NavLink>
                         </div>
                     </div>
                     <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.repost.body}</p>
+                    {repostImages}
                 </div>
             </NavLink>
         }
@@ -185,7 +193,7 @@ class Post extends Component {
             <div>
             <article className="home-container pt-3 pl-3 pr-3 pb-0">
                 <div className="d-flex">
-                    <img className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
+                    <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
                     <div className="ml-2">
                         <p className="m-0"><b>{this.state.post.user.first_name} {this.state.post.user.last_name}</b></p>
                         <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.username}><p className="m-0">@{this.state.post.user.username}</p></NavLink>
@@ -196,6 +204,7 @@ class Post extends Component {
                 <div>
                     <p style={{fontSize: "18pt"}} className="mt-2 mb-1" >{this.state.post.body}</p>
                     {repost}
+                    {images}
                     <p className="mb-3" style={{color:'#5b7083', fontSize: "12pt"}}> {this.formatDate(this.state.post.created_at)}</p>
                     <hr className="mt-3 mb-3"/>
                     <p className="mb-3" style={{color: "#5b7083"}}> 

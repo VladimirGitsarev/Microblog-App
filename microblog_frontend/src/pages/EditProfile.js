@@ -15,6 +15,7 @@ class EditProfile extends Component{
             account:'',
             loading: true
       };
+      this.handleImage = this.handleImage.bind(this)
     }
 
     componentDidMount(){       
@@ -30,7 +31,8 @@ class EditProfile extends Component{
                 status: res.data.status,
                 location: res.data.location,
                 link: res.data.link,
-                birthdate: res.data.birth_date
+                birthdate: res.data.birth_date,
+                fileUrl: res.data.avatar
             });
         })
     }
@@ -45,6 +47,26 @@ class EditProfile extends Component{
         })   
     }
 
+    handleImage(event) {
+        this.setState({
+            name: event.target.files[0].name,
+            file: event.target.files[0],
+            fileUrl: URL.createObjectURL(event.target.files[0]),
+            uploaded: true
+        })
+  }
+
+    handleImageSubmit = (e) => {
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append("image", this.state.file);
+        axiosInstance
+            .patch(`http://localhost:8000/auth/user/${this.state.account.id}/`, formData, {headers:{'Content-Type': 'multipart/form-data'}})
+            .then(r => {
+                this.setState({account: r.data})
+            })
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         axiosInstance
@@ -56,7 +78,8 @@ class EditProfile extends Component{
                 status: this.state.status,
                 location: this.state.location,
                 link: this.state.link,
-                birth_date: this.state.birthdate
+                birth_date: this.state.birthdate,
+                image: this.state.file
             })
             .then(res =>{
                 this.setState({
@@ -102,7 +125,7 @@ class EditProfile extends Component{
                             <div className="pt-1 pb-1 home-container">
                                 <div className="d-flex align-items-center justify-content-sm-start justify-content-center flex-wrap">
                                     <div > 
-                                            <img className="p-2 align-self-center rounded-circle" src={this.state.account.avatar} width="150" height="150"></img>
+                                            <img style={{objectFit: "cover"}} className="p-2 align-self-center rounded-circle" src={this.state.account.avatar} width="150" height="150"></img>
                                     </div>
                                     <div className="user-info">
                                         <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.account.first_name} {this.state.account.last_name} </b></p>
@@ -201,6 +224,31 @@ class EditProfile extends Component{
                                         </div>
                                     </div>
                                 </form>
+                                <hr/>
+                                <form enctype="multipart/form-data" onSubmit={this.handleImageSubmit}>
+                                    <h6><span style={{color: "#5b7083"}}>Avatar</span></h6>
+                                    <div className="form-group row">
+                                        <label htmlFor="inputImage" className="col-sm-2 col-form-label">Image</label>
+                                        <div className="col-sm-10 mb-0">
+                                            <div className="input-group mb-1">
+                                                <div className="custom-file" >
+                                                    <input type="file" id="inputGroupFile01" onChange={this.handleImage}/>
+                                                    <label className="custom-file-label mb-0" htmlFor="inputGroupFile01">{this.state.uploaded ? this.state.name : "Choose file"}</label>
+                                                </div>
+                                            </div>
+                                            <small id="birthdateHelp" className="pt-0 mt-0 form-text text-muted">Upload the photo of yourself</small>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex justify-content-center">
+                                        <img style={{objectFit: "cover", borderRadius:"1.5rem"}} width="300" height="300" src={this.state.fileUrl}/>
+                                    </div>
+                                    <div className="form-group row justify-content-end">
+                                        <div className="col-sm-0 pr-3">
+                                            <button type="submit" className="def-btn btn-normal">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+
                             </div>
                         </div>
                         <div className="ml-0 mb-4 d-none d-xl-block d-lg-block d-md-none col-lg-4">

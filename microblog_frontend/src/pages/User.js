@@ -29,7 +29,6 @@ class Profile extends Component{
        posts: [],
        followed: false,
        loading: true,
-       loading_accout: true
       };
       this.followClick = this.followClick.bind(this);
       this.getUser = this.getUser.bind(this)
@@ -131,7 +130,7 @@ class Profile extends Component{
                             <div className="pt-1 pb-1 home-container">
                            <div className="d-flex align-items-center justify-content-sm-start justify-content-center flex-wrap">
                                <div > 
-                                    <img className="p-2 rounded-circle align-self-center" src={this.state.account.avatar} width="150" height="150"></img>
+                                    <img style={{objectFit: "cover"}} className="p-2 rounded-circle align-self-center" src={this.state.account.avatar} width="150" height="150"></img>
                                </div>
                                <div className="user-info">
                                    <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.account.first_name} {this.state.account.last_name} </b></p>
@@ -166,7 +165,7 @@ class Profile extends Component{
                             </h6>
                             </div>
                             
-                            <PostsList account={this.props.account} posts={this.state.posts}></PostsList>
+                            <PostsList history={this.props.history} account={this.props.account} posts={this.state.posts}></PostsList>
                             {this.state.loading && <Loader />}
                         </div>
                         <div className="ml-0 mb-4 d-none d-xl-block d-lg-block d-md-none col-lg-4">
