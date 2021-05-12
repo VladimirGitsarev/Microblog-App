@@ -3,6 +3,8 @@ from hashlib import md5
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from authentication.services.compress import Compressor
+
 
 class User(AbstractUser):
     birth_date = models.DateField(blank=True, null=True)
@@ -18,3 +20,8 @@ class User(AbstractUser):
             return self.image.url
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, 150)
+
+    def save(self, *args, **kwargs):
+        new_image = Compressor(self.image).compress()
+        self.image = new_image
+        super().save(*args, **kwargs)

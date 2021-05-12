@@ -1,6 +1,9 @@
 from django.db import models
-from authentication.models import User
+
 from core.models.abstract_models import CreatedAt, UpdatedAt, SoftDelete
+
+from authentication.services.compress import Compressor
+from authentication.models import User
 
 
 class Post(CreatedAt, UpdatedAt, SoftDelete):
@@ -34,3 +37,8 @@ class PostImage(CreatedAt):
 
     def __str__(self):
         return f'Image {self.image} for {self.post}'
+
+    def save(self, *args, **kwargs):
+        new_image = Compressor(self.image).compress()
+        self.image = new_image
+        super().save(*args, **kwargs)
