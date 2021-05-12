@@ -41,7 +41,7 @@ class Home extends Component{
                             <div className="col-md-10 col-lg-7">
                                 <h5 className="header">Home page</h5>
                                 <AddPost account={this.props.account} getPosts={this.getPosts}></AddPost>
-                                <PostsList account={this.props.account} posts={this.state.posts}></PostsList>
+                                <PostsList history={this.props.history} account={this.props.account} posts={this.state.posts}></PostsList>
                                 {this.state.loading && <Loader />}
                             </div>
                             <div className="ml-0 mb-4 d-none d-xl-block d-lg-block d-md-none col-lg-4">

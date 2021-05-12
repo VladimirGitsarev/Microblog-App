@@ -40,7 +40,7 @@ class CommentItem extends Component{
         return(
                 <article className="post-container d-flex">
                     <div>
-                        <img className="mr-2 rounded-circle" src={this.comment.user.avatar} width="50" height="50"></img>
+                        <img style={{objectFit: "cover"}} className="mr-2 rounded-circle" src={this.comment.user.avatar} width="50" height="50"></img>
                     </div>
                     <div>
                         <div className="d-inline-flex flex-wrap">

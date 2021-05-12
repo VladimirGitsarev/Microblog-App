@@ -158,7 +158,7 @@ code {
   transition: .15s ease-out all;
 }
 
-input[type="text"], input[type="password"], input[type="email"], input[type="search"], input[type="date"]{
+input[type="text"], input[type="password"], input[type="email"], input[type="search"], input[type="date"], input[type="file"]{
   border-radius: 1.5rem;
 }
 
@@ -316,6 +316,22 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
         background-color: #f5f4f4;
         transition: .15s ease-out all;
         cursor: pointer;
+    }
+
+    .file {
+         position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 3;
+        display: block;
+        height: calc(1.5em + .75rem);
+        padding: .375rem .75rem;
+        line-height: 1.5;
+        color: #495057;
+        content: "Browse";
+        background-color: #e9ecef;
+        border-left: inherit;
     }
 
     ::-webkit-scrollbar {

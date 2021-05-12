@@ -131,7 +131,7 @@ class Profile extends Component{
                             <div className="pt-1 pb-1 home-container">
                            <div className="d-flex align-items-center justify-content-sm-start justify-content-center flex-wrap">
                                <div > 
-                                    <img className="p-2 rounded-circle align-self-center" src={this.state.account.avatar} width="150" height="150"></img>
+                                    <img style={{objectFit: "cover"}} className="p-2 rounded-circle align-self-center" src={this.state.account.avatar} width="150" height="150"></img>
                                </div>
                                <div className="user-info">
                                    <p><FontAwesomeIcon size="sm" style={{color:'#4ea4ff'}} icon={faUserAlt}/> <b>{this.state.account.first_name} {this.state.account.last_name} </b></p>

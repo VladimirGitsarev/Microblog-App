@@ -22,7 +22,7 @@ class UserItem extends Component{
         return(
             <div className="">
                 <div className="recommend-user d-flex mb-1 p-1">
-                    <img className="rounded-circle" src={this.user.avatar} height="50" width="50"></img>
+                    <img style={{objectFit: "cover"}} className="rounded-circle" src={this.user.avatar} height="50" width="50"></img>
                     <div className="ml-2">
                         <p className="m-0"><b>{this.user.first_name} {this.user.last_name}</b></p>
                         <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+this.user.username}><p className="m-0">@{this.user.username}</p></NavLink>

@@ -59,7 +59,7 @@ class PostSmallItem extends Component{
             <div onClick={this.showPost}>
                 <article className="post-container d-flex">
                     <div>
-                        <img className="mr-2 rounded-circle" src={this.post.user.avatar} width="30" height="30"></img>
+                        <img style={{objectFit: "cover"}} className="mr-2 rounded-circle" src={this.post.user.avatar} width="30" height="30"></img>
                     </div>
                     <div style={{fontSize: '11pt'}}>
                         <div className="d-inline-flex flex-wrap">

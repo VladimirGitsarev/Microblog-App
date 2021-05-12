@@ -103,7 +103,8 @@ class App extends Component{
           <Route path={'/register'} component={Register}/>
           <Route path={'/profile/edit'} component={EditProfile}/>
           <Route path={'/profile'} 
-            render={(props) => <Profile {...props} 
+            render={(props) => <Profile {...props}
+              history={this.history}
               account={this.state.account}
             />}/>
           <Route path={'/search'} component={Search} />
