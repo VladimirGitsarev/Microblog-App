@@ -237,7 +237,7 @@ class Post extends Component {
             {this.state.commenting && <AddComment focus={this.state.commenting} post={this.state.post} getComments={this.getComments}/>}
             </div>
         let comments = this.state.loading_comments ? <Loader /> : <CommentsList comments={this.state.comments} post={this.state.post} ></CommentsList>
-        let recommend = this.state.loading_post ? '' : <Recommend showPost={this.showPost} content={'posts'} user={this.state.post.user}/>
+        let recommend = this.state.loading_post ? '' : <Recommend showPost={this.showPost} content={'posts'} user={this.state.post.user.id}/>
         return(
         <Fragment>
             <div className="container">

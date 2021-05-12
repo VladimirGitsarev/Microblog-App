@@ -158,12 +158,12 @@ class ResetPasswordView(GenericAPIView):
             status=status.HTTP_200_OK,
         )
 
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         """Update password for user specified in token"""
         payload = jwt.decode(kwargs.get('token'), settings.EMAIL_SECRET_KEY, algorithms=['HS256'])
         user = User.objects.get(id=payload.get('user_id'))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user.set_password(request.data.get('password'))
-        user.save()
+        user.save(update_fields=['password'])
         return Response({'details': 'password successfully updated'}, status=status.HTTP_200_OK)
