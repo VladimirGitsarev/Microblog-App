@@ -145,9 +145,9 @@ class EditProfile extends Component{
                                             {birthdate}
                                         </p>
                                         <p style={{color: "gray"}}> 
-                                            <span><b style={{color: "#212529"}}>{this.state.account.followers.length}</b> followers</span> 
+                                            <NavLink style={{color: "inherit"}} to={"/followings/followers"}><span><b style={{color: "#212529"}}>{this.state.account.followers.length}</b> followers</span></NavLink>
                                             &nbsp;|&nbsp;
-                                            <span><b style={{color: "#212529"}}>{this.state.account.following.length}</b> following</span>
+                                            <NavLink style={{color: "inherit"}} to={"/followings/following"}><span><b style={{color: "#212529"}}>{this.state.account.following.length}</b> following</span></NavLink>
                                         </p>
                                 </div>
                             </div>
