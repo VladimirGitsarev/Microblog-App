@@ -20,6 +20,7 @@ import Repost from './pages/Repost';
 import Search from './pages/Search';
 import Chat from "./pages/Chat";
 import Reset from "./pages/Reset";
+import Followings from "./pages/Followings";
 
 class App extends Component{
   constructor(props) {
@@ -107,6 +108,7 @@ class App extends Component{
           <Route path={'/repost/:id'} component={Repost} />
           <Route path={'/register/:token?'} component={Register}/>
           <Route path={'/profile/edit'} component={EditProfile}/>
+          <Route path={'/followings/:current?'} component={Followings} />
           <Route path={'/profile'} 
             render={(props) => <Profile {...props}
               history={this.history}

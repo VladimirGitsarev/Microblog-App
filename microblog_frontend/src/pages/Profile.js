@@ -85,9 +85,9 @@ class Profile extends Component{
                                     {birthdate}
                                 </p>
                                 <p style={{color: "gray"}}> 
-                                    <span><b style={{color: "#212529"}}>{this.getLength(this.state.user.followers)}</b> followers</span>
+                                    <NavLink style={{color: "inherit"}} to={"followings/followers"}><span><b style={{color: "#212529"}}>{this.getLength(this.state.user.followers)}</b> followers</span></NavLink>
                                     &nbsp;|&nbsp;
-                                    <span><b style={{color: "#212529"}}>{this.getLength(this.state.user.following)}</b> following</span>
+                                    <NavLink style={{color: "inherit"}} to={"followings/following"}><span><b style={{color: "#212529"}}>{this.getLength(this.state.user.following)}</b> following</span></NavLink>
                                 </p>
                            </div>
                             <h6 style={{padding: "0px 15px"}}>
