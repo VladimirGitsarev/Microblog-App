@@ -62,7 +62,7 @@ class App extends Component{
     if (this.state.logged_in)
       this.getCurrentUser();
     else{
-      if (!window.location.pathname.startsWith("/reset"))
+      if (!window.location.pathname.startsWith("/reset") && !window.location.pathname.startsWith("/register"))
       {
         this.history.push('/login');
       }
@@ -104,8 +104,8 @@ class App extends Component{
           render={(props) => <Post {...props} 
             account={this.state.account}
           />}/>
-          <Route path={'/repost/:id'} component={Repost} /> 
-          <Route path={'/register'} component={Register}/>
+          <Route path={'/repost/:id'} component={Repost} />
+          <Route path={'/register/:token?'} component={Register}/>
           <Route path={'/profile/edit'} component={EditProfile}/>
           <Route path={'/profile'} 
             render={(props) => <Profile {...props}

@@ -17,7 +17,7 @@ class RegisterEmail:
             'exp': time() + expiration_time_seconds
         }, settings.EMAIL_SECRET_KEY, algorithm='HS256')
 
-        activation_url = url + token
+        activation_url = "http://0.0.0.0:3000/register/" + token
         subject = 'Microblog profile activation'
         html_content = f"""
                     <body>

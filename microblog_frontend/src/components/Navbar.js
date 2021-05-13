@@ -54,7 +54,7 @@ class Navbar extends Component{
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        <NavLink className="navbar-brand" to="/">Microblog</NavLink>
+        {localStorage.getItem('access_token') ? <NavLink className="navbar-brand" to="/">Microblog</NavLink> : <NavLink className="navbar-brand" to="/login">Microblog</NavLink>}
         {menu}
       </nav>
       </div>

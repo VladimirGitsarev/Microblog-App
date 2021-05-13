@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import {NavLink, useHistory} from 'react-router-dom';
 import { useState } from 'react';
 import React, {Component, Fragment} from 'react'
 import axiosInstance from '../axios';
@@ -8,8 +8,21 @@ class Register extends Component{
       super(props);
 
       this.state = {
-        error: '',
+          error: '',
+          activating: false,
+          activated: false,
       };
+    }
+
+    componentDidMount() {
+        if (this.props.match.params.token){
+            this.setState({activating: true})
+            axiosInstance
+                .get(`http://localhost:8000/auth/register/` + this.props.match.params.token)
+                .then(res => {
+                    this.setState({activated: true, activating: false})
+                })
+        }
     }
 
     handleChange = (e) => {
@@ -27,6 +40,7 @@ class Register extends Component{
 
     handleSubmit = (e) => {
         e.preventDefault();
+        this.setState({activating: true})
         axiosInstance
 			.post(`http://localhost:8000/auth/register/`, {
 				username: this.state.username,
@@ -36,25 +50,19 @@ class Register extends Component{
                 last_name: this.state.lastname
 			})
             .then((res) => {
-                this.props.history.push('/login');
+                this.setState({activating: false, messageSent: true})
             })
             .catch(err =>{
                 this.setState({
-                    error: "Invalid data! Check all the fields."
+                    error: "Invalid data! Check all the fields.",
+                    activating: false
                 })
             })   
     }     
 
     render(){
-        return (
-            <div className="container">
-                <div className="row justify-content-center mt-5">
-                <h2>Welcome to <strong>Microblog!</strong></h2>
-                </div>
-                <div className="row justify-content-center mt-3">
-                    <h3>Sign Up</h3>
-                </div>
-                <div className="row justify-content-center">
+
+        let userForm = !this.state.activated ? <div className="row justify-content-center">
                     <form className="col-8 col-lg-4 col-md-6 col-sm-8 mb-3">
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
@@ -82,9 +90,23 @@ class Register extends Component{
                         </div>
                         <button onClick={this.handleSubmit} type="submit" className="def-btn btn-normal btn-block">Sign Up</button>
                     </form>
+                </div> : <div>
+                    <div className="row justify-content-center mt-3"><h5>Your account successfully activated!</h5></div>
+                    <div className="row justify-content-center mt-3"><p>Go to <i><NavLink to={"/login"}>Login page</NavLink></i></p> </div>
                 </div>
+        return (
+            <div className="container">
+                <div className="row justify-content-center mt-5">
+                <h2>Welcome to <strong>Microblog!</strong></h2>
+                </div>
+                <div className="row justify-content-center mt-3">
+                    <h3>Sign Up</h3>
+                </div>
+                {!this.state.messageSent ? (!this.state.activating && userForm) : null }
+                {this.state.activating && <div className="reset-loader"/>}
+                {this.state.messageSent && <div className="d-flex flex-column justify-content-center align-items-center mt-5"><h5>We've sent the email to <b>{this.state.email}</b></h5> <h6>Check your email and follow the instructions described in it</h6></div>}
                 <div className="row justify-content-center">
-                <p style={{ color: '#d53d3dd0'}}><b>{this.state.error}</b></p>
+                    <p style={{ color: '#d53d3dd0'}}><b>{this.state.error}</b></p>
                 </div>
             </div>
     )}
