@@ -111,6 +111,7 @@ class UserViewSet(ReadOnlyModelViewSet):
             )
 
     @action(detail=False, methods=['get'])
+    # todo: return popular users if current user has no followings
     def recommend(self, request, *args, **kwargs):
         users = User.objects.filter(
             followers__in=request.user.following.all()
