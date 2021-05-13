@@ -22,6 +22,7 @@ class User(AbstractUser):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, 150)
 
     def save(self, *args, **kwargs):
-        new_image = Compressor(self.image).compress()
-        self.image = new_image
+        if self.image:
+            new_image = Compressor(self.image).compress()
+            self.image = new_image
         super().save(*args, **kwargs)

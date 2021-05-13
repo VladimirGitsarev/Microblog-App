@@ -76,13 +76,12 @@ class LoginForm extends Component {
             <div className="row justify-content-center mt-3">
               <p style={{ color: '#d53d3dd0'}}><b>{this.state.error}</b></p>
             </div>
+            <div className="row justify-content-center mt-0">
+                {this.state.error ? <p>Forgot password? <i><NavLink to={"/reset"}>Reset the password</NavLink></i></p> : null}
+            </div>
         </div>
     );
   }
 }
 
 export default LoginForm;
-
-// LoginForm.propTypes = {
-//   handle_login: PropTypes.func.isRequired
-// };
