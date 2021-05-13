@@ -133,6 +133,12 @@ class PostViewSet(
             comment = post.comment_set.create(user=request.user, body=request.data['body'])
             return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
 
+    @action(detail=False, methods=['get'])
+    def recommend(self, request, *args, **kwargs):
+        following = request.user.following.all()  # get user current user following
+        liked = Post.objects.filter(likes=request.user)  # get posts liked by this user
+        return Response({}, status=status.HTTP_200_OK)  # to do
+
 
 class CommentViewSet(
     GenericViewSet,

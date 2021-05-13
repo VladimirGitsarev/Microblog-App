@@ -41,7 +41,7 @@ class Recommend extends Component{
         }
 
     getUsers(){
-        axiosInstance.get(`http://localhost:8000/auth/users/`)
+        axiosInstance.get(`http://localhost:8000/auth/users/recommend`)
         .then(res => {
             this.setState({
                 users: res.data,

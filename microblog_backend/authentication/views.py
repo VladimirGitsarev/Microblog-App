@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 
 import jwt
+from django.db.models import Count
 
 from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
 from rest_framework.mixins import ListModelMixin, UpdateModelMixin
@@ -108,6 +109,14 @@ class UserViewSet(ReadOnlyModelViewSet):
                 },
                 status=status.HTTP_200_OK
             )
+
+    @action(detail=False, methods=['get'])
+    def recommend(self, request, *args, **kwargs):
+        users = User.objects.filter(
+            followers__in=request.user.following.all()
+        ).exclude(id=request.user.id).annotate(count=Count('followers')).order_by('count')\
+         .exclude(id__in=request.user.following.all().values_list('id', flat=True))[:5]
+        return Response(self.get_serializer(users, many=True).data, status=status.HTTP_200_OK)
 
 
 class RegisterView(GenericAPIView):
