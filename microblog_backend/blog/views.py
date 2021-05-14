@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
@@ -12,6 +12,7 @@ from rest_framework.mixins import (
     DestroyModelMixin,
 )
 
+from authentication.models import User
 from blog.serializers import RetrievePostSerializer, CreatePostSerializer, CommentSerializer
 from blog.models import Post, Comment
 
@@ -135,10 +136,15 @@ class PostViewSet(
 
     @action(detail=False, methods=['get'])
     def recommend(self, request, *args, **kwargs):
-        following = request.user.following.all()  # get user current user following
-        liked = Post.objects.filter(likes=request.user)  # get posts liked by this user
-        # todo: return posts liked by users who liked posts current user liked
-        return Response({}, status=status.HTTP_200_OK)
+        recommend_posts = Post.objects.filter(
+            likes__in=User.objects.filter(post__likes=request.user).exclude(id=request.user.id).distinct()
+        ).exclude(likes=request.user).exclude(user=request.user).distinct().union(
+            Post.objects.aggregate(count=Count('likes')).order_by('-count').exclude(likes=request.user).exclude(user=request.user).distinct()
+        )
+
+        print(recommend_posts.query)
+
+        return Response(self.get_serializer(recommend_posts, many=True).data, status=status.HTTP_200_OK)
 
 
 class CommentViewSet(

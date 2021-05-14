@@ -16,10 +16,13 @@ class Home extends Component{
         loading: true
       };
       this.getPosts = this.getPosts.bind(this)
+      this.getRecommendedPosts = this.getRecommendedPosts.bind(this)
+        this.clickBar = this.clickBar.bind(this)
     }
 
     componentDidMount(){
         this.getCurrentUser();
+        document.querySelector('#followings').classList = "switch-btn switch-btn-active"
     }
 
     getCurrentUser(){
@@ -34,6 +37,7 @@ class Home extends Component{
         }
 
     getPosts(){
+        this.setState({loading: true, posts: []})
         axiosInstance.get(`http://localhost:8000/blog/posts/`)
         .then(res => {
             this.setState({
@@ -41,7 +45,27 @@ class Home extends Component{
                 loading: false
             })
         })
-        
+    }
+
+    getRecommendedPosts(){
+        this.setState({loading: true, posts: []})
+        axiosInstance.get(`http://localhost:8000/blog/posts/recommend`)
+        .then(res => {
+            this.setState({
+                posts: res.data,
+                loading: false
+            })
+        })
+    }
+
+    clickBar(event){
+        document.querySelector('#followings').classList = "switch-btn"
+        document.querySelector('#recommended').classList = "switch-btn"
+        event.target.classList = "switch-btn switch-btn-active"
+        switch (event.target.id){
+            case 'followings': this.getPosts(); break;
+            case 'recommended': this.getRecommendedPosts(); break;
+        }
     }
     
     render(){
@@ -52,6 +76,10 @@ class Home extends Component{
                             <div className="col-md-10 col-lg-7">
                                 <h5 className="header">Home page</h5>
                                 <AddPost account={this.props.account} getPosts={this.getPosts}></AddPost>
+                                <div style={{border: "1px solid #e6ecf0", borderBottom: 0}} className="d-flex">
+                                    <div id="followings" className="switch-btn" onClick={this.clickBar}>Followings</div>
+                                    <div id="recommended" className="switch-btn" onClick={this.clickBar}>Recommended</div>
+                                </div>
                                 <PostsList history={this.props.history} account={this.state.account} posts={this.state.posts}></PostsList>
                                 {this.state.loading && <Loader />}
                             </div>
