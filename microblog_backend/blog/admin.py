@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from blog.models import Post, Comment, PostImage
+from blog.models import Post, Comment, PostImage, Vote, Option
 
 from jet.admin import CompactInline
 
@@ -34,3 +34,5 @@ class PostAdmin(BaseModelMixinAdmin):
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, BaseModelMixinAdmin)
 admin.site.register(PostImage)
+admin.site.register(Vote)
+admin.site.register(Option)

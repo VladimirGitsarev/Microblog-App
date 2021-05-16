@@ -21,6 +21,7 @@ class PostItem extends Component{
       this.post = props.post;
       this.btnClick = this.btnClick.bind(this)
       this.toPost = this.toPost.bind(this)
+      this.optionClick = this.optionClick.bind(this)
     }
 
     componentDidMount(){
@@ -115,6 +116,11 @@ class PostItem extends Component{
       if (event.target.id === 'post-trigger' || event.target.tagName === 'ARTICLE')
         this.props.history.push("/post/" + this.post.id)
     }
+
+    optionClick(event){
+      console.log(this.post)
+    }
+
     //
     // toRepost(event){
     //   if (event.target.id === 'post-trigger' || event.target.tagName === 'ARTICLE')
@@ -148,6 +154,16 @@ class PostItem extends Component{
         </NavLink>
       }
 
+      let vote = null;
+      if (this.post.vote){
+        vote = <div className="vote-box">{this.post.vote.options.map( option => {
+          return <div className="d-flex flex-row align-items-center">
+            <div className="vote-option" id={option.id} key={option.id} onClick={this.optionClick} >{option.body}<div className="ml-2">0</div></div>
+
+          </div>
+        })}</div>
+      }
+
       let images = this.post.images ? <div className="d-flex justify-content-center align-content-center flex-wrap mt-1 mb-1">{this.post.images.map( (image) => {
                     return <img data-toggle="modal" data-target={"#exampleModal" + this.post.id} src={image} style={{width: imageSize + "px", height: imageSize + "px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
                 })}</div> : null
@@ -166,6 +182,7 @@ class PostItem extends Component{
             <p className="m-0" style={{color:"#5b7083"}}>&nbsp;&middot;&nbsp;{this.formatDate(this.post.created_at)}</p>
           </div>
           <div className="pb-1">{this.post.body}</div>
+          {vote}
           {repost}
           {images}
           <Slider post={this.post}/>

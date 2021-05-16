@@ -6,12 +6,30 @@ from authentication.services.compress import Compressor
 from authentication.models import User
 
 
+class Vote(CreatedAt, UpdatedAt, SoftDelete):
+    users = models.ManyToManyField(User, related_name='vote_users', blank=True)
+    expires = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'Vote {self.id}'
+
+
+class Option(CreatedAt, UpdatedAt, SoftDelete):
+    vote = models.ForeignKey(Vote, default=None, null=True, blank=True, on_delete=models.DO_NOTHING)
+    body = models.CharField(max_length=50)
+    users = models.ManyToManyField(User, related_name='option_users', blank=True)
+
+    def __str__(self):
+        return f'Option {self.id} for vote'
+
+
 class Post(CreatedAt, UpdatedAt, SoftDelete):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     body = models.CharField(max_length=300)
     likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
     dislikes = models.ManyToManyField(User, related_name='post_dislikes', blank=True)
     repost = models.ForeignKey('self', default=None, null=True, blank=True, on_delete=models.DO_NOTHING)
+    vote = models.ForeignKey(Vote, default=None, null=True, blank=True, on_delete=models.CASCADE)
 
     @property
     def images(self):

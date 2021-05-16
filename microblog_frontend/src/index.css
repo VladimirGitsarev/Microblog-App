@@ -412,6 +412,30 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
         transition: .3s all;
     }
 
+    .vote-box{
+        border-radius: 1.5rem;
+        padding: 1rem;
+        border: 1px solid #e6ecf0;
+    }
+
+    .vote-option{
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        background: #e6ecf0;
+        margin: 0.5rem 0;
+        border: 1px solid #e6ecf0;
+        transition: .3s all;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .vote-option:hover{
+        background: #f8f8f8;
+        border: 1px solid #e6ecf0;
+        transition: .3s all;
+    }
+
     ::-webkit-scrollbar {
         width: 7px;
     }
