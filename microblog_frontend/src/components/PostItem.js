@@ -5,7 +5,7 @@ import {NavLink} from 'react-router-dom'
 
 import axiosInstance from 'axios';
 import { faThumbsUp as likeReg, faThumbsDown as dislikeReg, faComment} from '@fortawesome/free-regular-svg-icons'
-import { faReply, faThumbsUp as likeSol, faThumbsDown as dislikeSol} from '@fortawesome/free-solid-svg-icons'
+import {faReply, faThumbsUp as likeSol, faThumbsDown as dislikeSol, faShare} from '@fortawesome/free-solid-svg-icons'
 import ChatItem from "./ChatItem";
 import Slider from "./Slider";
 
@@ -138,7 +138,7 @@ class PostItem extends Component{
         repost = 
         <NavLink style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.post.repost.id}>
           <div className="repost-item ">
-              <p style={{fontSize: '11pt'}} className="m-0"> <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
+              <p style={{fontSize: '11pt'}} className="m-0"> <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faShare}/> Repost from&nbsp;
                 <b>{this.post.repost.user.first_name}&nbsp;{this.post.repost.user.last_name}</b>
                 <NavLink style={{ color:"#5b7083"}} to={"/user/" + this.post.repost.user.username}>&nbsp;@{this.post.repost.user.username}</NavLink>
               </p>
@@ -176,7 +176,7 @@ class PostItem extends Component{
             &nbsp;&nbsp;&nbsp;
             <p className="m-0" style={{color:"#007bff"}}> <NavLink style={{textDecoration: "none", color:"#007bff"}} to={"/post/" + this.post.id + "/comment"}> <span name="comment" className="repost-span">Comment <FontAwesomeIcon name="comment" icon={faComment}/></span></NavLink>{this.post.comments.length || ''}</p>
             &nbsp;&nbsp;&nbsp;
-            <p className="m-0" style={{color:"#007bff"}}> <NavLink style={{textDecoration: "none", color:"#007bff"}} name="repost" to={"/repost/" + this.post.id} className="repost-span">Repost <FontAwesomeIcon name="repost" icon={faReply}/></NavLink>{this.post.reposts.length || ''}</p>
+            <p className="m-0" style={{color:"#007bff"}}> <NavLink style={{textDecoration: "none", color:"#007bff"}} name="repost" to={"/repost/" + this.post.id} className="repost-span">Repost <FontAwesomeIcon name="repost" icon={faShare}/></NavLink>{this.post.reposts.length || ''}</p>
           </div>
         </div>
       </article>

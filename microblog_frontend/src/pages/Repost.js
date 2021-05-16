@@ -2,7 +2,7 @@ import React,  {Component, Fragment} from 'react'
 import PostsList from '../components/PostsList'
 import Loader from '../Loader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImage, faReply} from '@fortawesome/free-solid-svg-icons'
+import {faImage, faReply, faShare} from '@fortawesome/free-solid-svg-icons'
 import { faEdit} from '@fortawesome/free-regular-svg-icons'
 import axiosInstance from '../axios'
 import { NavLink } from 'react-router-dom';
@@ -103,7 +103,7 @@ class Repost extends Component{
                 <NavLink onClick={this.postClick} style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.state.post.id}> 
                     <div className="repost pt-2 pb-2 ml-0 mt-3">
                         <p style={{fontSize: '14pt'}} className="mb-1"> 
-                            <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
+                            <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faShare}/> Repost from&nbsp;
                         </p>
                         <div className="d-flex mb-1">
                             <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>

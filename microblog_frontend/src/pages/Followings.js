@@ -12,7 +12,7 @@ class Followings extends Component {
             following: [],
             loadingFollowers: true,
             loadingFollowing: true,
-            followingList: true
+            followingList: false
         };
         this.clickBar = this.clickBar.bind(this)
 

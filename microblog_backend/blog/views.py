@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
@@ -12,6 +12,7 @@ from rest_framework.mixins import (
     DestroyModelMixin,
 )
 
+from authentication.models import User
 from blog.serializers import RetrievePostSerializer, CreatePostSerializer, CommentSerializer
 from blog.models import Post, Comment
 
@@ -132,6 +133,22 @@ class PostViewSet(
         if request.method == 'POST':
             comment = post.comment_set.create(user=request.user, body=request.data['body'])
             return Response(CommentSerializer(comment).data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['get'])
+    def recommend(self, request, *args, **kwargs):
+        recommend_posts = Post.objects.filter(
+            likes__in=User.objects.filter(post__likes=request.user).exclude(id=request.user.id).distinct()
+        ).annotate(count=Count('likes')).exclude(
+                user__in=request.user.following.all()
+            ).exclude(likes=request.user).exclude(user=request.user).distinct().union(
+            Post.objects.annotate(
+                count=Count('likes')
+            ).order_by('-count').exclude(
+                user__in=request.user.following.all()
+            ).exclude(likes=request.user).exclude(user=request.user).distinct()
+        )
+
+        return Response(self.get_serializer(recommend_posts, many=True).data, status=status.HTTP_200_OK)
 
 
 class CommentViewSet(
