@@ -138,11 +138,15 @@ class PostViewSet(
     def recommend(self, request, *args, **kwargs):
         recommend_posts = Post.objects.filter(
             likes__in=User.objects.filter(post__likes=request.user).exclude(id=request.user.id).distinct()
-        ).exclude(likes=request.user).exclude(user=request.user).distinct().union(
-            Post.objects.aggregate(count=Count('likes')).order_by('-count').exclude(likes=request.user).exclude(user=request.user).distinct()
+        ).annotate(count=Count('likes')).exclude(
+                user__in=request.user.following.all()
+            ).exclude(likes=request.user).exclude(user=request.user).distinct().union(
+            Post.objects.annotate(
+                count=Count('likes')
+            ).order_by('-count').exclude(
+                user__in=request.user.following.all()
+            ).exclude(likes=request.user).exclude(user=request.user).distinct()
         )
-
-        print(recommend_posts.query)
 
         return Response(self.get_serializer(recommend_posts, many=True).data, status=status.HTTP_200_OK)
 

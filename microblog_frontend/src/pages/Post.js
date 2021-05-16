@@ -7,7 +7,15 @@ import Loader from '../Loader'
 import CommentsList from '../components/CommentsList'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faComment as commentReg, faThumbsDown as dislikeReg, faThumbsUp as likeReg} from '@fortawesome/free-regular-svg-icons'
-import { faReply, faComment as commentSol, faThumbsDown as dislikeSol, faThumbsUp as likeSol, faCross, faTimes} from '@fortawesome/free-solid-svg-icons';
+import {
+    faReply,
+    faComment as commentSol,
+    faThumbsDown as dislikeSol,
+    faThumbsUp as likeSol,
+    faCross,
+    faTimes,
+    faShare
+} from '@fortawesome/free-solid-svg-icons';
 import AddComment from '../components/AddComment'
 import Modal from '../components/Modal';
 import Recommend from '../components/Recommend';
@@ -175,7 +183,7 @@ class Post extends Component {
             <NavLink onClick={this.postClick} style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.state.post.repost.id}> 
                 <div className="repost pt-2 pb-2">
                 <p style={{fontSize: '14pt'}} className="mb-1"> 
-                    <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faReply}/> Repost from&nbsp;
+                    <FontAwesomeIcon style={{ color:"#5b7083"}} name="repost" icon={faShare}/> Repost from&nbsp;
                 </p>
                     <div className="d-flex mb-1">
                         <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.repost.user.avatar} height="50" width="50"></img>
@@ -230,7 +238,7 @@ class Post extends Component {
                             </span>
                         </p>
                         <p onClick={this.commentClick}><span className="post-icon repost-post"><FontAwesomeIcon icon={this.state.commenting ? commentSol : commentReg} size="lg"/></span></p>
-                        <p> <NavLink style={{textDecoration: "none", color: "inherit"}} to={"/repost/"+this.state.post.id}> <span className="post-icon repost-post"><FontAwesomeIcon icon={faReply} size="lg"/></span></NavLink></p>
+                        <p> <NavLink style={{textDecoration: "none", color: "inherit"}} to={"/repost/"+this.state.post.id}> <span className="post-icon repost-post"><FontAwesomeIcon icon={faShare} size="lg"/></span></NavLink></p>
                     </div>
                 </div>
             </article>
