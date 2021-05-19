@@ -39,6 +39,7 @@ class Post extends Component {
         this.toggleModal = this.toggleModal.bind(this)
         this.deletePost = this.deletePost.bind(this)
         this.showPost = this.showPost.bind(this)
+        this.optionClick = this.optionClick.bind(this)
     }
 
     componentDidMount(){        
@@ -169,6 +170,15 @@ class Post extends Component {
         this.getPost(id);
     }
 
+    optionClick(event){
+      if (!this.state.post.vote.users.includes(this.props.account.id)){
+        axiosInstance.post(`http://0.0.0.0:8000/blog/votes/${this.state.post.vote.id}/vote/`, {"option":event.target.id})
+            .then(res => {
+              this.setState({post: res.data})
+            })
+      }
+    }
+
     render(){
         let images = this.state.post.images ? <div className="d-flex align-content-center align-self-center flex-wrap mt-2 mb-2">{this.state.post.images.map( (image) => {
                     return <img className="img-fluid" src={image} style={{maxWidth:"100%", height: "auto", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
@@ -179,6 +189,13 @@ class Post extends Component {
             let repostImages = this.state.post.repost.images ? <div className="d-flex align-content-center flex-wrap mt-1 mb-1">{this.state.post.repost.images.map( (image) => {
                     return <img src={image} style={{width: "95px", height: "95px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
                 })}</div> : null
+            let repostVote = this.state.post.repost.vote ? <div className="vote-box">{this.state.post.repost.vote.options.map( option => {
+              return <div className="d-flex flex-row align-items-center">
+                <div className={(this.state.post.repost.vote.users.includes(this.props.account.id) ? "vote-option-voted" : "vote-option") + (option.users.includes(this.props.account.id) ? " user-option-voted" : "")} id={option.id} key={option.id} onClick={this.optionClick} >{option.body}
+                  <div className={"ml-2" + (option.users.includes(this.props.account.id) ? " user-option-voted" : " option-count")}>{this.state.post.repost.vote.users.includes(this.props.account.id) ? option.users.length : null} </div>
+                </div>
+              </div>
+            })}</div> : null
             repost = 
             <NavLink onClick={this.postClick} style={{textDecoration: "none", color: "inherit"}} to={"/post/" + this.state.post.repost.id}> 
                 <div className="repost pt-2 pb-2">
@@ -193,10 +210,24 @@ class Post extends Component {
                         </div>
                     </div>
                     <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.repost.body}</p>
+                    {repostVote}
                     {repostImages}
                 </div>
             </NavLink>
         }
+
+        let vote = null;
+        if (this.state.post.vote){
+        vote = <div className="vote-box">{this.state.post.vote.options.map( option => {
+              console.log()
+              return <div className="d-flex flex-row align-items-center">
+                <div className={(this.state.post.vote.users.includes(this.props.account.id) ? "vote-option-voted" : "vote-option") + (option.users.includes(this.props.account.id) ? " user-option-voted" : "")} id={option.id} key={option.id} onClick={this.optionClick} >{option.body}
+                  <div className={"ml-2" + (option.users.includes(this.props.account.id) ? " user-option-voted" : " option-count")}>{this.state.post.vote.users.includes(this.props.account.id) ? option.users.length : null} </div>
+                </div>
+              </div>
+            })}</div>
+        }
+
         let post = this.state.loading_post ? <Loader /> : 
             <div>
             <article className="home-container pt-3 pl-3 pr-3 pb-0">
@@ -212,6 +243,7 @@ class Post extends Component {
                 <div>
                     <p style={{fontSize: "18pt"}} className="mt-2 mb-1" >{this.state.post.body}</p>
                     {repost}
+                    {vote}
                     {images}
                     <p className="mb-3" style={{color:'#5b7083', fontSize: "12pt"}}> {this.formatDate(this.state.post.created_at)}</p>
                     <hr className="mt-3 mb-3"/>
