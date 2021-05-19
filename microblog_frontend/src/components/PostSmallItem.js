@@ -2,7 +2,7 @@ import PostsList from "./PostsList";
 import React, { Component} from 'react';
 import {NavLink} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faReply, } from '@fortawesome/free-solid-svg-icons'
+import {faChartBar, faPoll, faReply,} from '@fortawesome/free-solid-svg-icons'
 
 class PostSmallItem extends Component{
     constructor(props) {
@@ -58,6 +58,15 @@ class PostSmallItem extends Component{
               </div>
             </NavLink>
           }
+        let vote = null
+        if (this.post.vote){
+            vote = <div className="d-flex justify-content-center">
+                <div className="d-flex flex-column align-items-center">
+                    <FontAwesomeIcon icon={faChartBar} color="#e2ebffdc" size="3x"/>
+                    <small>Poll</small>
+                </div>
+            </div>
+        }
         return(
             <div onClick={this.showPost}>
                 <article className="post-container d-flex">
@@ -72,6 +81,7 @@ class PostSmallItem extends Component{
                         </p>
                         </div>
                         <div className="pb-1">{this.post.body.substring(0, 100)} {this.post.body.length < 100 ? '' : '...'}</div>
+                        {vote}
                         {images}
                         {repost}
                     </div>

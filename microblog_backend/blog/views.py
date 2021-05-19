@@ -13,8 +13,8 @@ from rest_framework.mixins import (
 )
 
 from authentication.models import User
-from blog.serializers import RetrievePostSerializer, CreatePostSerializer, CommentSerializer
-from blog.models import Post, Comment
+from blog.serializers import RetrievePostSerializer, CreatePostSerializer, CommentSerializer, VoteSerializer
+from blog.models import Post, Comment, Vote, Option
 
 
 class PostViewSet(
@@ -54,11 +54,18 @@ class PostViewSet(
             data = {
                 'body': request.data['body'],
                 'user': request.user.id,
-                'repost': request.data['repost'] if 'repost' in request.data else None
+                'repost': request.data['repost'] if 'repost' in request.data else None,
             }
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
-            post = serializer.save()
+            if 'options' in request.data:
+                vote = Vote.objects.create()
+                options = request.data['options'].split(',')
+                for option in options:
+                    Option.objects.create(vote=vote, body=option)
+                post = serializer.save(vote=vote)
+            else:
+                post = serializer.save()
 
             if 'images' in dict(self.request.FILES):
                 if len(dict(self.request.FILES)['images']) > 5:
@@ -166,3 +173,23 @@ class CommentViewSet(
             Comment.make_soft_delete(comment, True)
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'details': 'You can delete only your comments'})
+
+
+class VoteViewSet(
+    GenericViewSet,
+    RetrieveModelMixin,
+    DestroyModelMixin,
+):
+    queryset = Vote.objects.filter(soft_deleted=False)
+    serializer_class = VoteSerializer
+    permission_classes = (IsAuthenticated, )
+
+    @action(detail=True, methods=['post'])
+    def vote(self, request, *args, **kwargs):
+        vote = self.get_object()
+        vote.users.add(request.user)
+        option = Option.objects.get(id=request.data.get('option'))
+        option.users.add(request.user)
+        vote.save()
+        option.save()
+        return Response(RetrievePostSerializer(vote.post_set.first()).data, status=status.HTTP_200_OK)

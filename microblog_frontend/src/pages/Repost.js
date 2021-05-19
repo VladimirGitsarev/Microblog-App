@@ -2,7 +2,7 @@ import React,  {Component, Fragment} from 'react'
 import PostsList from '../components/PostsList'
 import Loader from '../Loader'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faImage, faReply, faShare} from '@fortawesome/free-solid-svg-icons'
+import {faChartBar, faImage, faReply, faShare} from '@fortawesome/free-solid-svg-icons'
 import { faEdit} from '@fortawesome/free-regular-svg-icons'
 import axiosInstance from '../axios'
 import { NavLink } from 'react-router-dom';
@@ -71,6 +71,7 @@ class Repost extends Component{
 
     render(){
         let images = null;
+        let vote = null;
         let imageSize;
         if (!this.state.loading_post){
             switch (this.state.post.images.length){
@@ -83,6 +84,12 @@ class Repost extends Component{
             images = this.state.post.images ? <div className="d-flex justify-content-center align-content-center align-self-center flex-wrap mt-1 mb-1">{this.state.post.images.map( (image) => {
                     return <img src={image} style={{width: imageSize + "px", height: imageSize + "px", objectFit:"cover", borderRadius: "1.5rem", marginBottom:"0.5rem", marginRight:"0.5rem"}}/>
                 })}</div> : null
+            vote = this.state.post.vote ? <div className="d-flex justify-content-center">
+                <div className="d-flex flex-column align-items-center">
+                    <FontAwesomeIcon icon={faChartBar} color="#e2ebffdc" size="10x"/>
+                    <small>Poll</small>
+                </div>
+            </div> : null
         }
         let header = this.state.loading_post ? '' :
             <span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>
@@ -113,6 +120,7 @@ class Repost extends Component{
                             </div>
                         </div>
                         <p style={{fontSize: "14pt"}} className="m-0">{this.state.post.body}</p>
+                        {vote}
                         {images}
                     </div>
                 </NavLink>
