@@ -43,7 +43,7 @@ class UserFullItem extends Component{
                         <NavLink onClick={this.linkClick} style={{color:'#5b7083'}}  to={"/user/"+this.user.username}><p className="m-0">@{this.user.username}</p></NavLink>
                         <p className="m-0" style={{fontSize:'11pt'}}>{this.user.status}</p>
                     </div>
-                    {
+                    {this.user.id !== this.props.currentUser.id &&
                         this.state.followers && <div className="d-flex align-items-center justify-content-end">
                             {
                                 this.state.followers.includes(this.props.currentUser.id) ?

@@ -19,6 +19,7 @@ import {
 import AddComment from '../components/AddComment'
 import Modal from '../components/Modal';
 import Recommend from '../components/Recommend';
+import UsersList from "../components/UsersList";
 
 class Post extends Component {
     constructor(props) {
@@ -31,7 +32,8 @@ class Post extends Component {
             commenting: false,
             liked: '',
             disliked: '',
-            modal: false
+            modal: false,
+            currentList: "comments"
         };
         this.commentClick = this.commentClick.bind(this)
         this.getComments = this.getComments.bind(this)
@@ -40,6 +42,7 @@ class Post extends Component {
         this.deletePost = this.deletePost.bind(this)
         this.showPost = this.showPost.bind(this)
         this.optionClick = this.optionClick.bind(this)
+        this.clickBar = this.clickBar.bind(this)
     }
 
     componentDidMount(){        
@@ -153,7 +156,7 @@ class Post extends Component {
     }
     
     commentClick(){
-        this.setState({commenting: !this.state.commenting});
+        this.setState({commenting: !this.state.commenting, currentList: "comments"});
     }
 
     postClick = e =>{
@@ -177,6 +180,41 @@ class Post extends Component {
               this.setState({post: res.data})
             })
       }
+    }
+
+    clickBar(event){
+        let buttons = document.querySelectorAll('.switch-btn')
+        buttons.forEach((button) => button.classList = "switch-btn")
+        event.target.classList = "switch-btn switch-btn-active"
+        this.setState({currentList: event.target.id, loading_comments: true})
+        switch (event.target.id){
+            case 'likes': this.getLikes(); break;
+            case 'dislikes': this.getDislikes(); break;
+            case 'comments': this.setState({loading_comments: false}); break;
+            case 'reposts': this.getReposts(); break;
+        }
+
+    }
+
+    getLikes(){
+        axiosInstance.get(`http://0.0.0.0:8000/blog/posts/${this.state.post.id}/likes/`)
+            .then(res => {
+              this.setState({currentData: res.data, loading_comments: false})
+            })
+    }
+
+    getDislikes(){
+        axiosInstance.get(`http://0.0.0.0:8000/blog/posts/${this.state.post.id}/dislikes/`)
+            .then(res => {
+              this.setState({currentData: res.data, loading_comments: false})
+            })
+    }
+
+    getReposts(){
+        axiosInstance.get(`http://0.0.0.0:8000/blog/posts/${this.state.post.id}/reposts/`)
+            .then(res => {
+              this.setState({currentData: res.data, loading_comments: false})
+            })
     }
 
     render(){
@@ -232,12 +270,12 @@ class Post extends Component {
             <div>
             <article className="home-container pt-3 pl-3 pr-3 pb-0">
                 <div className="d-flex">
-                    <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"></img>
+                    <img style={{objectFit: "cover"}} className="rounded-circle" src={this.state.post.user.avatar} height="50" width="50"/>
                     <div className="ml-2">
                         <p className="m-0"><b>{this.state.post.user.first_name} {this.state.post.user.last_name}</b></p>
                         <NavLink style={{color:'#5b7083'}}  to={"/user/"+this.state.post.user.username}><p className="m-0">@{this.state.post.user.username}</p></NavLink>
                     </div>
-                    {this.state.post.user.id == this.state.account.id ?
+                    {this.state.post.user.id === this.state.account.id ?
                     <FontAwesomeIcon onClick={this.toggleModal} className="ml-auto awesome-cross" icon={faTimes} size="lg"/> : ''}
                 </div>
                 <div>
@@ -266,7 +304,6 @@ class Post extends Component {
                         <p>
                             <span name="dislike" onClick={this.btnClick} className="post-icon dislike-post">
                                 {this.state.disliked ? <FontAwesomeIcon style={{color:"#e0245e"}} icon={ dislikeSol} size="lg"/> : <FontAwesomeIcon icon={ dislikeReg} size="lg"/>}
-                                
                             </span>
                         </p>
                         <p onClick={this.commentClick}><span className="post-icon repost-post"><FontAwesomeIcon icon={this.state.commenting ? commentSol : commentReg} size="lg"/></span></p>
@@ -275,8 +312,20 @@ class Post extends Component {
                 </div>
             </article>
             {this.state.commenting && <AddComment focus={this.state.commenting} post={this.state.post} getComments={this.getComments}/>}
+                <div style={{border: "1px solid #e6ecf0", borderBottom: 0}} className="d-flex">
+                    <div id="likes" className="switch-btn" onClick={this.clickBar}>Likes</div>
+                    <div id="dislikes" className="switch-btn" onClick={this.clickBar}>Dislikes</div>
+                    <div id="comments" className="switch-btn switch-btn-active" onClick={this.clickBar}>Comments</div>
+                    <div id="reposts" className="switch-btn" onClick={this.clickBar}>Reposts</div>
+                </div>
             </div>
-        let comments = this.state.loading_comments ? <Loader /> : <CommentsList comments={this.state.comments} post={this.state.post} ></CommentsList>
+        let footer = null;
+        switch (this.state.currentList){
+            case "likes": footer = this.state.loading_comments ? <Loader /> : <div style={{borderLeft: "1px solid #f3f3f3", borderRight: "1px solid #f3f3f3" }}><UsersList user={this.state.account} users={this.state.currentData} full={true}/></div>; break;
+            case "dislikes": footer = this.state.loading_comments ? <Loader /> : <div style={{borderLeft: "1px solid #f3f3f3", borderRight: "1px solid #f3f3f3"}}><UsersList user={this.state.account} users={this.state.currentData} full={true}/></div>; break;
+            case "comments": footer = this.state.loading_comments ? <Loader /> : <CommentsList comments={this.state.comments} post={this.state.post} />; break;
+            case "reposts": footer = this.state.loading_comments ? <Loader /> : <div style={{borderLeft: "1px solid #f3f3f3", borderRight: "1px solid #f3f3f3" }}><UsersList user={this.state.account} users={this.state.currentData} full={true}/></div>; break;
+        }
         let recommend = this.state.loading_post ? '' : <Recommend showPost={this.showPost} content={'posts'} user={this.state.post.user.id}/>
         return(
         <Fragment>
@@ -286,7 +335,7 @@ class Post extends Component {
                     <div className="col-md-10 col-lg-7">
                         <h5 className="header">Post</h5>
                         {post}
-                        {comments}
+                        {footer}
                     </div>
                     <div className="ml-0 mb-4 d-none d-xl-block d-lg-block d-md-none col-lg-4">
                         <div className="side-container sticky-top">
