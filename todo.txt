@@ -6,6 +6,6 @@
 + Add following and followers viewing (FE + BE)
 + Add recommendation algorithm and viewing (FE + BE)
 + Add votes with different answers (BE + FE)
-- Add likes and dislikes viewing (FE)
++ Add likes and dislikes viewing (FE)
 - Add telegram interaction (BE)
 - Add reminders for tg (cron) (BE)

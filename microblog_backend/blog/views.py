@@ -13,6 +13,7 @@ from rest_framework.mixins import (
 )
 
 from authentication.models import User
+from authentication.serializers import DefaultUserSerializer
 from blog.serializers import RetrievePostSerializer, CreatePostSerializer, CommentSerializer, VoteSerializer
 from blog.models import Post, Comment, Vote, Option
 
@@ -84,6 +85,19 @@ class PostViewSet(
             Comment.make_soft_delete(post, True)
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'details': 'You can delete only your posts'})
+
+    @action(detail=True, methods=['get'])
+    def likes(self, request, pk):
+        return Response(DefaultUserSerializer(self.get_object().likes.all(), many=True).data)
+
+    @action(detail=True, methods=['get'])
+    def dislikes(self, request, pk):
+        return Response(DefaultUserSerializer(self.get_object().dislikes.all(), many=True).data)
+
+    @action(detail=True, methods=['get'])
+    def reposts(self, request, pk):
+        users = User.objects.filter(post__in=Post.objects.filter(repost=self.get_object()))
+        return Response(DefaultUserSerializer(users, many=True).data)
 
     @action(detail=True, methods=['post'])
     def like(self, request, pk):
