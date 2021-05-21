@@ -59,7 +59,9 @@ INSTALLED_APPS = [
     'blog',
     'storages',
     'chat',
+    'tg'
 ]
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -174,6 +176,8 @@ AWS_S3_FILE_OVERWRITE = False
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 
 CORS_ALLOW_ALL_ORIGINS = True
 
