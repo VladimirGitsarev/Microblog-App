@@ -47,28 +47,33 @@ class Command(BaseCommand):
     help = 'Telegram bot'
 
     def handle(self, *args, **options):
-        request = Request(
+        tg_bot = TelegramBot()
+        start_handler = CommandHandler('start', start_command)
+        tg_bot.updater.dispatcher.add_handler(start_handler)
+
+        message_handler = MessageHandler(Filters.text, do_echo)
+        tg_bot.updater.dispatcher.add_handler(message_handler)
+
+        tg_bot.updater.start_polling()
+        tg_bot.updater.idle()
+
+
+class TelegramBot:
+    def __init__(self):
+        self.request = Request(
             connect_timeout=0.5,
             read_timeout=1.0,
         )
 
-        bot = Bot(
-            request=request,
+        self.bot = Bot(
+            request=self.request,
             token=settings.TELEGRAM_TOKEN,
         )
 
-        print(bot.get_me())
+        print(self.bot.get_me())
 
-        updater = Updater(
-            bot=bot,
+        self.updater = Updater(
+            bot=self.bot,
             use_context=True,
         )
 
-        start_handler = CommandHandler('start', start_command)
-        updater.dispatcher.add_handler(start_handler)
-
-        message_handler = MessageHandler(Filters.text, do_echo)
-        updater.dispatcher.add_handler(message_handler)
-
-        updater.start_polling()
-        updater.idle()
