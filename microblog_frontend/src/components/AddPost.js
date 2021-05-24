@@ -47,7 +47,7 @@ class AddPost extends Component{
             body: '',
             symbols: 300,
             images: [],
-            vote: !this.state.vote,
+            vote: !this.state.vote ? this.state.vote : this.state.vote,
             options: ["", ""],
             placeholder: this.state.vote ? "What's up?" : "Ask a question..."
           })

@@ -7,6 +7,7 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons'
 import axiosInstance from '../axios'
 import { NavLink } from 'react-router-dom';
 import Recommend from '../components/Recommend'
+import TgForm from "../components/TgForm";
 
 class EditProfile extends Component{
     constructor(props) {
@@ -224,6 +225,7 @@ class EditProfile extends Component{
                                         </div>
                                     </div>
                                 </form>
+                                <TgForm/>
                                 <hr/>
                                 <form enctype="multipart/form-data" onSubmit={this.handleImageSubmit}>
                                     <h6><span style={{color: "#5b7083"}}>Avatar</span></h6>

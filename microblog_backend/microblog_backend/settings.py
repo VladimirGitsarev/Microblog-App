@@ -226,5 +226,19 @@ JET_THEMES = [
     }
 ]
 
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Minsk'
+
+CELERY_BEAT_SCHEDULE = {
+    "send_news": {
+        "task": "microblog_backend.tasks.send_news",
+        "schedule": timedelta(minutes=60),
+    },
+}
+
 JET_SIDE_MENU_COMPACT = True
 JET_CHANGE_FORM_SIBLING_LINKS = True
