@@ -1,12 +1,12 @@
 import datetime
 
-from blog.models import Post
-from celery import shared_task
-
-from telegram.files.inputmedia import InputMediaPhoto
-
+from microblog_backend.settings import TELEGRAM_NOTIFICATION_INTERVAL
 from tg.management.commands.bot import TelegramBot
 from tg.models import TelegramUser
+from blog.models import Post
+
+from telegram.files.inputmedia import InputMediaPhoto
+from celery import shared_task
 
 
 @shared_task
@@ -17,7 +17,7 @@ def send_news():
         posts = Post.objects.filter(
             soft_deleted=False,
             user__in=tg_user.user.following.all(),
-            created_at__gt=datetime.datetime.now() - datetime.timedelta(hours=1)
+            created_at__gt=datetime.datetime.now() - datetime.timedelta(hours=TELEGRAM_NOTIFICATION_INTERVAL)
         )
         try:
             for post in posts:

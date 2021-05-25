@@ -332,7 +332,7 @@ class Post extends Component {
             <div className="container">
                 {this.state.modal && <Modal delete={this.deletePost} toggle={this.toggleModal}/>}
                 <div className="row justify-content-center">
-                    <div className="col-md-10 col-lg-7">
+                    <div className="col-md-10 col-lg-7 p-0 ml-3 mr-3" style={{backgroundColor:"rgba(255, 255, 255, 0.9)"}}>
                         <h5 className="header">Post</h5>
                         {post}
                         {footer}

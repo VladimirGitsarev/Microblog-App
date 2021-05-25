@@ -144,7 +144,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -181,6 +181,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+TELEGRAM_NOTIFICATION_INTERVAL = 3
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -239,7 +240,7 @@ CELERY_TIMEZONE = 'Europe/Minsk'
 CELERY_BEAT_SCHEDULE = {
     "send_news": {
         "task": "microblog_backend.tasks.send_news",
-        "schedule": crontab(minute=0, hour='10-19/3'),
+        "schedule": crontab(minute=0, hour=f'10-19/{TELEGRAM_NOTIFICATION_INTERVAL}'),
     },
 }
 

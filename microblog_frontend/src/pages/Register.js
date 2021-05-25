@@ -95,8 +95,8 @@ class Register extends Component{
                     <div className="row justify-content-center mt-3"><p>Go to <i><NavLink to={"/login"}>Login page</NavLink></i></p> </div>
                 </div>
         return (
-            <div className="container">
-                <div className="row justify-content-center mt-5">
+            <div className="container pt-4 mt-4" style={{backgroundColor:"rgba(255, 255, 255, 0.9)", borderRadius: "1.5rem"}}>
+                <div className="row justify-content-center">
                 <h2>Welcome to <strong>Microblog!</strong></h2>
                 </div>
                 <div className="row justify-content-center mt-3">

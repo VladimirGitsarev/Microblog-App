@@ -30,7 +30,7 @@ class Navbar extends Component{
     if (this.props.logged_in){
       label = <p className="m-0 pr-2 align-baseline"><b>@{this.props.user.username}</b></p>
       menu = <div className="collapse navbar-collapse" id="navbarToggler">
-        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+        <ul className="navbar-nav mr-auto mt-2 mt-lg-0" style={{fontSize: '14pt'}}>
           <li className="nav-item">
             <NavLink className="nav-link" to="/" exact><span className="sr-only">(current)</span>Home</NavLink>
           </li>
@@ -50,11 +50,11 @@ class Navbar extends Component{
     }
     return(
       <div>
-      <nav className="navbar navbar-expand-md navbar-light bg-light sticky-top">
+      <nav className="navbar navbar-expand-md navbar-light sticky-top" style={{backgroundColor: "rgba(248, 249, 253, 0.95)", borderBottom: "1px solid #e6ecf0"}}>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
-        {localStorage.getItem('access_token') ? <NavLink className="navbar-brand" to="/">Microblog</NavLink> : <NavLink className="navbar-brand" to="/login">Microblog</NavLink>}
+        {localStorage.getItem('access_token') ? <NavLink className="navbar-brand" to="/"><b style={{color: "rgba(82,123,222,0.8)"}}>Microblog</b></NavLink> : <NavLink className="navbar-brand" to="/login"><b style={{color: "rgba(82,123,222,0.8)"}}>Microblog</b></NavLink>}
         {menu}
       </nav>
       </div>

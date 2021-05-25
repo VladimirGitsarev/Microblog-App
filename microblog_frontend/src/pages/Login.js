@@ -41,16 +41,15 @@ class LoginForm extends Component {
       .catch(err => { 
         if (err.response.status === 401) { 
           this.setState({
-            error: "Invalid username or password!",
+            error: "Invalid username or password",
           })
         }
       })
-
   };
 
   render() {
     return (
-        <div className="container">
+        <div className="container col-lg-8 col-md-10 col-sm-10 mt-4 pt-2" style={{backgroundColor:"rgba(255, 255, 255, 0.9)", borderRadius: "1.5rem"}}>
             <div className="row justify-content-center mt-5">
               <h2>Welcome to <strong>Microblog!</strong></h2>
             </div>

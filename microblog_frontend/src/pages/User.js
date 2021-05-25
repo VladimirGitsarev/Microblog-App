@@ -123,7 +123,7 @@ class Profile extends Component{
 
         let body = this.state.loading_accout ? <Loader /> : 
         <div className="row justify-content-center">
-                        <div className="col-md-10 col-lg-7">
+                        <div className="col-md-10 col-lg-7 p-0 ml-3 mr-3" style={{backgroundColor:"rgba(255, 255, 255, 0.9)"}}>
                             <h5 className="header">{this.state.account.first_name} {this.state.account.last_name}
                                 <br /><span style={{color:"gray", fontSize:"12pt", fontWeight: "normal"}}>{this.state.posts.length} posts </span>
                             </h5>

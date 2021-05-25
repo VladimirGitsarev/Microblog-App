@@ -145,8 +145,8 @@ class Chat extends Component{
                             <div className="ml-0 mb-4 col-md-4 col-lg-4">
                                 {this.state.loading ? <Loader /> : <ChatsList chats={this.state.chats} account={this.state.account} clickChat={this.clickChat}/>}
                             </div>
-                            <div className="col-md-8 col-lg-8">
-                                <div id="chat-window" style={{height: "80vh", overflowY: "auto"}}
+                            <div className="col-md-8 col-lg-8" >
+                                <div id="chat-window" style={{height: "80vh", overflowY: "auto", backgroundColor:"rgba(255, 255, 255, 0.9)"}}
                                      className="p-3 d-flex flex-column border rounded">
 
                                     {
