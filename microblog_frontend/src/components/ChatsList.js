@@ -13,7 +13,7 @@ class ChatsList extends Component{
 
     render(){
         return(
-            <div className="p-0 d-flex flex-column border rounded chat-list">
+            <div className="p-0 d-flex flex-column border rounded chat-list" style={{backgroundColor:"rgba(255, 255, 255, 0.9)"}}>
                 { this.state.chats ? this.state.chats.map( (chat) => {
                     return <ChatItem account={this.props.account} chat={chat} key={chat.id} clickChat={this.props.clickChat}/>
                 }) : null}

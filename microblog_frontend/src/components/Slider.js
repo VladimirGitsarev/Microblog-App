@@ -15,22 +15,23 @@ class Slider extends Component {
         <div className="modal fade bd-example-modal-lg" id={"exampleModal" + this.props.post.id}  tabIndex="-1" role="dialog"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog modal-lg" role="document">
-                <div className="modal-content">
-                    <div className="modal-header">
+                <div className="custom-modal-content">
+                    <div className="custom-modal-header">
                         <h5 className="modal-title" id="exampleModalLabel">{this.props.post.body}</h5>
                         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div className="modal-body">
+                    <div className="mb-1"><span style={{color: "gray", margin: "0 1rem"}}>@{this.props.post.user.username}</span></div>
+                    <div className="custom-modal-body">
                          <div id={"carouselExampleControls" + this.props.post.id} className="carousel slide" data-ride="carousel">
                             <div className="carousel-inner">
                                 <div className="carousel-item active">
-                                    <img className="d-block w-100" src={this.props.post.images[0]} alt="Second slide"/>
+                                    <img style={{borderRadius: "1.5rem"}} className="d-block w-100" src={this.props.post.images[0]} alt="Second slide"/>
                                 </div>
                                  { this.props.post.images.slice(1).map( (image) => {
                                     return <div className="carousel-item">
-                                    <img className="d-block w-100" src={image} alt="First slide"/>
+                                    <img style={{borderRadius: "1.5rem"}}   className="d-block w-100" src={image} alt="First slide"/>
                                 </div>
                                 })}
                             </div>

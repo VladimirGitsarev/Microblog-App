@@ -134,8 +134,8 @@ class Reset extends Component {
             </div>
         </div>
         return (
-            <div className="container mt-5">
-            <div className="row justify-content-center mt-5">
+            <div className="container mt-4 pt-3 pb-3" style={{backgroundColor:"rgba(255, 255, 255, 0.9)", borderRadius: "1.5rem"}}>
+            <div className="row justify-content-center">
               <h2>Reset the <strong>password</strong></h2>
             </div>
                 {this.state.loading ? <div className="reset-loader"/> : (this.props.match.params.token ? resetting : userSearch) }

@@ -1,10 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
-  margin: 0;
-  font-family: 'Open Sans', sans-serif !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif !important;
+    background: linear-gradient(rgba(255,255,255,.65), rgba(255,255,255,.65)), url("https://image.freepik.com/free-vector/social-media-in-hand-drawn-doodles-seamless-pattern_39663-246.jpg");
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /*https://thumbs.dreamstime.com/b/%D1%80%D0%B0%D0%B7-%D0%B8%D1%87%D0%BD%D1%8B%D0%B5-%D1%81%D0%BE%D1%86%D0%B8%D0%B0-%D1%8C%D0%BD%D1%8B%D0%B5-%D0%B7%D0%BD%D0%B0%D1%87%D0%BA%D0%B8-%D1%81%D1%80%D0%B5-%D1%81%D1%82%D0%B2-%D0%BC%D0%B0%D1%81%D1%81%D0%BE%D0%B2%D0%BE%D0%B9-%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D0%B8-%D0%B2-%D1%81%D1%82%D0%B8-%D0%B5-93786140.jpg*/
+    /*https://image.freepik.com/free-vector/business-hand-drawn-doodles-seamless-pattern-background_39663-248.jpg*/
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -70,7 +75,7 @@ code {
 }
 
 .post-container{
-  padding: 1rem 10px;
+  padding: 1rem;
   border-top: 1px solid #e6ecf0;
   transition: .15s all;
 }
@@ -78,7 +83,7 @@ code {
 .post-container:hover{
   cursor: pointer;
   transition: .15s all;
-  background-color: #f8f8f8;
+  background-color: rgba(243, 246, 255, 0.5);
 }
 .posts-container{
   border-left: 1px solid #e6ecf0;
@@ -252,17 +257,16 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
   border-radius: 10px;
   margin-top: 1.5rem;
   padding: 15px;
-  background-color: #f9f9f9ce;
+  background-color: rgba(249, 251, 255, 0.95);
 }
 
 .recommend-user{
   border-radius: 10px;
   transition: .15s ease-out all;
-
 }
 
 .recommend-user:hover{
-  background-color: #f3f3f3;
+  background-color: rgba(243, 246, 255, 0.75);
   transition: .15s ease-out all;
   cursor: pointer;
 }
@@ -331,7 +335,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
     }
 
     .chat-user:hover{
-        background-color: #f5f4f4;
+        background-color: rgba(243, 246, 255, 0.5);
         transition: .15s ease-out all;
         cursor: pointer;
     }
@@ -408,7 +412,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
     }
 
     .followings-user:hover{
-        background-color: #f8f8f8;
+        background-color: rgba(243, 246, 255, 0.5);
         transition: .3s all;
     }
 
@@ -421,9 +425,9 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
     .vote-option{
         border-radius: 0.5rem;
         padding: 0.5rem;
-        background: #e6ecf0;
+        background: #edf2ff;
         margin: 0.5rem 0;
-        border: 1px solid #e6ecf0;
+        border: 1px solid #edf2ff;
         transition: .3s all;
         width: 100%;
         display: flex;
@@ -434,9 +438,9 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
     .vote-option-voted{
         border-radius: 0.5rem;
         padding: 0.5rem;
-        background: #e6ecf0;
+        background: #edf2ff;
         margin: 0.5rem 0;
-        border: 1px solid #e6ecf0;
+        border: 1px solid #edf2ff;
         transition: .3s all;
         width: 100%;
         display: flex;
@@ -452,9 +456,35 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
     }
 
     .vote-option:hover{
-        background: #f8f8f8;
-        border: 1px solid #e6ecf0;
+        background: #e4eaff;
+        border: 1px solid #edf2ff;
         transition: .3s all;
+    }
+
+    .custom-modal-content{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-clip: padding-box;
+        border-radius: 1rem;
+        outline: 0;
+        background-color: rgba(246, 247, 255, 0.95);
+    }
+
+    .custom-modal-header{
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 1rem 1.5rem 0 1.5rem;
+    }
+
+    .custom-modal-body{
+        position: relative;
+        flex: 1 1 auto;
+        padding: 0.75rem;
+        border-top: 1px solid #e6ecf0;
     }
 
     ::-webkit-scrollbar {
@@ -477,3 +507,8 @@ input[type="text"], input[type="password"], input[type="email"], input[type="sea
     ::-webkit-scrollbar-thumb:hover {
         background: #c7c7c7;
     }
+
+    :focus {
+    outline-style: none;
+    outline-width: 0px !important;
+}
