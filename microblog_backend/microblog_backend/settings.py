@@ -3,6 +3,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -59,7 +62,9 @@ INSTALLED_APPS = [
     'blog',
     'storages',
     'chat',
+    'tg'
 ]
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -175,6 +180,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 LANGUAGE_CODE = 'en-us'
@@ -221,6 +228,20 @@ JET_THEMES = [
         'title': 'Light Gray'
     }
 ]
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Minsk'
+
+CELERY_BEAT_SCHEDULE = {
+    "send_news": {
+        "task": "microblog_backend.tasks.send_news",
+        "schedule": crontab(minute=0, hour='10-19/3'),
+    },
+}
 
 JET_SIDE_MENU_COMPACT = True
 JET_CHANGE_FORM_SIBLING_LINKS = True

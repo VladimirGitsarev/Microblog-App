@@ -7,4 +7,5 @@ urlpatterns = [
     path('auth/', include('authentication.urls', namespace='auth')),
     path('blog/', include('blog.urls', namespace='blog')),
     path('chat/', include('chat.urls')),
+    path('telegram/', include('tg.urls', namespace='tg'))
 ]

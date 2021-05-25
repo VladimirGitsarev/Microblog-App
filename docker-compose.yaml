@@ -21,16 +21,16 @@ services:
       - microblog_backend/.env
     depends_on:
       - db
-#  celery:
-#    build: microblog_backend
-#    command: celery worker -A trading_platform -l INFO -B
-#    volumes:
-#      - .:/app
-#    env_file:
-#      - .env
-#    depends_on:
-#      - web
-#      - redis
+  celery:
+    build: microblog_backend
+    command: bash -c "pip install redis && celery worker -A microblog_backend -l INFO -B"
+    volumes:
+      - ./microblog_backend/:/app
+    env_file:
+      - microblog_backend/.env
+    depends_on:
+      - web
+      - redis
   redis:
     image: redis:6.2.1-alpine
   front:

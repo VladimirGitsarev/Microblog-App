@@ -17,6 +17,8 @@ django-3-jet = "*"
 channels = "*"
 django-channels-jwt-auth-middleware = "*"
 channels-redis = "*"
+python-telegram-bot = "*"
+celery = "==4.4.7"
 
 [dev-packages]
 
