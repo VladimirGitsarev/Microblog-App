@@ -3,6 +3,9 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -236,7 +239,7 @@ CELERY_TIMEZONE = 'Europe/Minsk'
 CELERY_BEAT_SCHEDULE = {
     "send_news": {
         "task": "microblog_backend.tasks.send_news",
-        "schedule": timedelta(minutes=60),
+        "schedule": crontab(minute=0, hour='10-19/3'),
     },
 }
 
