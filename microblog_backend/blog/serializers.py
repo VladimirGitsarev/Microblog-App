@@ -44,15 +44,38 @@ class RetrievePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
-        'id', 'user', 'body', 'soft_deleted', 'created_at', 'updated_at', 'likes', 'dislikes', 'repost', 'images',
-        'reposts', 'comments', 'vote')
+            'id',
+            'user',
+            'body',
+            'soft_deleted',
+            'created_at',
+            'updated_at',
+            'likes',
+            'dislikes',
+            'repost',
+            'images',
+            'reposts',
+            'comments',
+            'vote'
+        )
 
 
 class CreatePostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = (
-        'id', 'user', 'body', 'soft_deleted', 'created_at', 'updated_at', 'likes', 'dislikes', 'repost', 'images')
+            'id',
+            'user',
+            'body',
+            'soft_deleted',
+            'created_at',
+            'updated_at',
+            'likes',
+            'dislikes',
+            'repost',
+            'images',
+            'vote'
+        )
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -60,6 +83,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'user', 'post', 'body', 'soft_deleted', 'created_at', 'updated_at')
-
-
+        fields = (
+            'id',
+            'user',
+            'post',
+            'body',
+            'soft_deleted',
+            'created_at',
+            'updated_at'
+        )
