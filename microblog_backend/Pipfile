@@ -19,6 +19,10 @@ django-channels-jwt-auth-middleware = "*"
 channels-redis = "*"
 python-telegram-bot = "*"
 celery = "==4.4.7"
+pytest = "*"
+faker = "*"
+pytest-factoryboy = "*"
+pytest-django = "*"
 
 [dev-packages]
 
